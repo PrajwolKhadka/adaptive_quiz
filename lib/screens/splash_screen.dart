@@ -9,33 +9,27 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
-      splash: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFFFFFFF),
-              Color(0xFFBEE1FA),
-            ],
+      splash: SizedBox.expand(
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFFFFFFFF),
+                Color(0xFFBEE1FA),
+              ],
+            ),
           ),
-        ),
-        child: Center(
-          child: Lottie.asset("assets/lottie/splash.json"),
-        ),
-      ),
-      nextScreen: Scaffold(
-        body: Center(
-          child: Text(
-            "Next Screen Placeholder",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          child: Center(
+            child: Lottie.asset("assets/lottie/splash.json"),
           ),
         ),
       ),
+      nextScreen: LoginScreen(),
+      splashIconSize: double.infinity,
       backgroundColor: Colors.transparent,
-      duration: 3000,
+      duration: 2500,
     );
   }
 }
