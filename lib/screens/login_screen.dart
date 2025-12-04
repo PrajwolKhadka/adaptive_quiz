@@ -20,36 +20,35 @@ class _LoginScreenState extends State<LoginScreen> {
     {"username": "kavya_ram121", "password": "123456"},
     {"username": "ops_sita232", "password": "password"},
   ];
+
   void login() {
     if (_formKey.currentState!.validate()) {
       setState(() => isLoading = true);
 
       Future.delayed(const Duration(seconds: 1), () {
+        if (!mounted) return;
+
         final inputEmail = emailController.text.trim();
         final inputPass = passwordController.text.trim();
 
-        final user = dummyUsers.firstWhere(
-              (u) => u["username"] == inputEmail && u["password"] == inputPass,
-          orElse: () => {},
-        );
-
-        if (user.isNotEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            showMySnackBar(context: context, message: "Login Successful"),
-          );
-          // Navigaion
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (_) => HomeScreen()));
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            showMySnackBar(context: context, message: "Invalid Credentials", color:Colors.red),
-          );
-        }
+        final userExists = dummyUsers.any((u) =>
+        u["username"] == inputEmail && u["password"] == inputPass);
 
         setState(() => isLoading = false);
+
+        if (userExists) {
+          showMySnackBar(context: context, message: "Login Successful");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else {
+          showMySnackBar(context: context, message: "Invalid Credentials", color: Colors.red);
+        }
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
