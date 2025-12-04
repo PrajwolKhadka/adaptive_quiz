@@ -1,5 +1,6 @@
-import 'package:adaptive_quiz/common/navigation_bar.dart';
+import 'package:adaptive_quiz/widget/my_gradient_button.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,6 +10,56 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  final List<Map<String, String>> quizVideos = [
+    {
+      "title": "Math Tricks",
+      "desc": "Learn amazing math shortcuts for faster calculation.",
+      "link": "https://www.youtube.com/watch?v=example1"
+    },
+    {
+      "title": "Science Basics",
+      "desc": "Understand core science concepts easily.",
+      "link": "https://www.youtube.com/watch?v=example2"
+    },
+    {
+      "title": "History Tips",
+      "desc": "Quick revision tips for history exams.",
+      "link": "https://www.youtube.com/watch?v=example3"
+    },
+    {
+      "title": "English Grammar",
+      "desc": "Improve your grammar with easy exercises.",
+      "link": "https://www.youtube.com/watch?v=example4"
+    },
+    {
+      "title": "General Knowledge",
+      "desc": "Boost your GK with daily updates.",
+      "link": "https://www.youtube.com/watch?v=example5"
+    },
+    {
+      "title": "General Knowledge",
+      "desc": "Boost your GK with daily updates.",
+      "link": "https://www.youtube.com/watch?v=example5"
+    },
+    {
+      "title": "General Knowledge",
+      "desc": "Boost your GK with daily updates.",
+      "link": "https://www.youtube.com/watch?v=example5"
+    },
+  ];
+
+  void _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+
+    bool launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!launched && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Could not open the link")),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +77,141 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-      ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [ Container(
+                  height: 250,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF223061),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              '"Trust yourself, you know more than you think you do."',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: 'Freeman',
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                padding: EdgeInsets.all(2),
+                                width: 190,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [Color(0xFF5DA0FF), Color(0xFF1D61E7)],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: MyGradientButton(
+                                  text: "Start Quiz",
+                                  onPressed: () {},
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 150,
+                        height: 220,
+                        child: Image.asset('assets/image/graduate_child.png'
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  "Quiz Preparation",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
 
+                Column(
+                  children: quizVideos.map((video) {
+                    return GestureDetector(
+                      onTap: () => _launchURL(video['link']!),
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(Icons.play_arrow, size: 40),
+                            ),
+                            const SizedBox(width: 16),
+
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    video['title']!,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    video['desc']!,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
