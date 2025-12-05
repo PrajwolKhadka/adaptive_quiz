@@ -130,35 +130,53 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         )
-                            : Column(
+                            : Row(
                           children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text(
+                                    '"Trust yourself, you know more than you think you do."',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: 'Freeman',
+                                    ),
+                                  ),
+                                  const SizedBox(height: 30),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      padding: EdgeInsets.all(2),
+                                      width: 190,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                          colors: [Color(0xFF5DA0FF), Color(0xFF1D61E7)],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: MyGradientButton(
+                                        text: "Start Quiz",
+                                        onPressed: () {},
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                             SizedBox(
-                              height: 180,
-                              child: Image.asset(
-                                'assets/image/graduate_child.png',
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            const Text(
-                              '"Trust yourself, you know more than you think you do."',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontFamily: 'Freeman',
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 16),
-                            MyGradientButton(
-                              text: "Start Quiz",
-                              onPressed: () {},
-                              color: Colors.transparent,
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFF5DA0FF), Color(0xFF1D61E7)],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
+                              width: 150,
+                              height: 220,
+                              child: Image.asset('assets/image/graduate_child.png'
                               ),
                             ),
                           ],
