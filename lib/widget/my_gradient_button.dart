@@ -5,6 +5,9 @@ class MyGradientButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Gradient? gradient;
   final Color? color;
+  final double? fontSize;
+  final double? paddingVertical;
+  final double? paddingHorizontal;
 
   const MyGradientButton({
     super.key,
@@ -12,6 +15,9 @@ class MyGradientButton extends StatelessWidget {
     required this.onPressed,
     this.gradient,
     this.color,
+    this.fontSize,
+    this.paddingVertical,
+    this.paddingHorizontal,
   });
 
   @override
@@ -19,18 +25,21 @@ class MyGradientButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+        padding: EdgeInsets.symmetric(
+          vertical: paddingVertical ?? 12,
+          horizontal: paddingHorizontal ?? 24,
+        ),
         decoration: BoxDecoration(
           gradient: gradient,
-          color: gradient == null ? color ?? Colors.blue : null, // fallback
+          color: gradient == null ? color ?? Colors.blue : null,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: 16,
+            fontSize: fontSize ?? 16,
           ),
         ),
       ),
