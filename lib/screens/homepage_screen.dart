@@ -32,11 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
       "desc": "Improve your grammar with easy exercises.",
       "link": "https://www.youtube.com/watch?v=example4"
     },
-    {
-      "title": "General Knowledge",
-      "desc": "Boost your GK with daily updates.",
-      "link": "https://www.youtube.com/watch?v=example5"
-    },
   ];
 
   void _launchURL(String url) async {
