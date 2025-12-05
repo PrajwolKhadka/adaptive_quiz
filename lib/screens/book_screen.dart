@@ -12,17 +12,17 @@ class _BookScreenState extends State<BookScreen> {
     {
       "title": "You are not so smart",
       "author": "David McRaney",
-      "image": "assets/images/notsmart.jpg"
+      "image": "assets/image/notsmart.jpg"
     },
     {
       "title": "Atomic Habits",
       "author": "James Clear",
-      "image": "assets/images/atomic.jpg"
+      "image": "assets/image/atomic.jpg"
     },
     {
       "title": "Rich Dad Poor Dad",
       "author": "Robert Kiyosaki",
-      "image": "assets/images/richpoor.jpg"
+      "image": "assets/image/richpoor.jpg"
     },
   ];
 
@@ -30,10 +30,11 @@ class _BookScreenState extends State<BookScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Books"),
-        centerTitle: true,
+        title: Text("Books", style: TextStyle(
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+        ),),
       ),
-
       body: ListView.builder(
         padding: const EdgeInsets.all(12),
         itemCount: books.length,
@@ -41,34 +42,36 @@ class _BookScreenState extends State<BookScreen> {
           final book = books[index];
 
           return GestureDetector(
-            onTap: () {
-              // TODO: open pdf later
-            },
+            onTap: () {},
             child: Card(
               elevation: 3,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
               margin: const EdgeInsets.only(bottom: 16),
-
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Color(0xFF223061)
+                ),
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    // Book image
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        book["image"]!,
-                        height: 80,
-                        width: 60,
-                        fit: BoxFit.cover,
+                    Container(
+                      height: 120,
+                      width: 90,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                          image: AssetImage(book["image"]!),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-
                     const SizedBox(width: 16),
-
-                    // Title and author
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,15 +79,16 @@ class _BookScreenState extends State<BookScreen> {
                           Text(
                             book["title"]!,
                             style: const TextStyle(
-                              fontSize: 18,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
+                              color: Colors.white
                             ),
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 8),
                           Text(
                             "by ${book["author"]!}",
                             style: const TextStyle(
-                              fontSize: 14,
+                              fontSize: 15,
                               color: Colors.grey,
                             ),
                           ),
@@ -94,6 +98,7 @@ class _BookScreenState extends State<BookScreen> {
                   ],
                 ),
               ),
+            ),
             ),
           );
         },
