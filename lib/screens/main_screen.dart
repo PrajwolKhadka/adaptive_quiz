@@ -1,4 +1,5 @@
 import 'package:adaptive_quiz/common/navigation_bar.dart';
+import 'package:adaptive_quiz/screens/book_screen.dart';
 import 'package:adaptive_quiz/screens/homepage_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = const [
     HomeScreen(),
-    // BookScreenPage(),
+    BookScreen(),
     // ResultScreenPage(),
     Center(child: Text("Books Page", style: TextStyle(fontSize: 28))),
     Center(child: Text("Results Page", style: TextStyle(fontSize: 28))),
