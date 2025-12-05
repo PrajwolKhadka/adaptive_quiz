@@ -37,16 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
       "desc": "Boost your GK with daily updates.",
       "link": "https://www.youtube.com/watch?v=example5"
     },
-    {
-      "title": "General Knowledge",
-      "desc": "Boost your GK with daily updates.",
-      "link": "https://www.youtube.com/watch?v=example5"
-    },
-    {
-      "title": "General Knowledge",
-      "desc": "Boost your GK with daily updates.",
-      "link": "https://www.youtube.com/watch?v=example5"
-    },
   ];
 
   void _launchURL(String url) async {
@@ -82,63 +72,99 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [ Container(
-                  height: 250,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF223061),
+              children: [
+                Card(
+                  elevation: 6,
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
+                  color: const Color(0xFF223061),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final isWide = constraints.maxWidth > 600;
+                        return isWide
+                            ? Row(
                           children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    '"Trust yourself, you know more than\nyou think you do."',
+                                    style: TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: 'Freeman',
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 20),
+                                  MyGradientButton(
+                                    text: "Start Quiz",
+                                    onPressed: () {},
+                                    color: Colors.transparent,
+                                    gradient: const LinearGradient(
+                                      colors: [Color(0xFF5DA0FF), Color(0xFF1D61E7)],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                    ),
+                                    fontSize: 26,
+                                    paddingHorizontal: 40,
+                                    paddingVertical: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            SizedBox(
+                              width: 300,
+                              height: 280,
+                              child: Image.asset(
+                                'assets/image/graduate_child.png',
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ],
+                        )
+                            : Column(
+                          children: [
+                            SizedBox(
+                              height: 180,
+                              child: Image.asset(
+                                'assets/image/graduate_child.png',
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
                             const Text(
                               '"Trust yourself, you know more than you think you do."',
-                              textAlign: TextAlign.left,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                                 fontFamily: 'Freeman',
                               ),
+                              textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 30),
-                            Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                padding: EdgeInsets.all(2),
-                                width: 190,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    colors: [Color(0xFF5DA0FF), Color(0xFF1D61E7)],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: MyGradientButton(
-                                  text: "Start Quiz",
-                                  onPressed: () {},
-                                  color: Colors.transparent,
-                                ),
+                            const SizedBox(height: 16),
+                            MyGradientButton(
+                              text: "Start Quiz",
+                              onPressed: () {},
+                              color: Colors.transparent,
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF5DA0FF), Color(0xFF1D61E7)],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 150,
-                        height: 220,
-                        child: Image.asset('assets/image/graduate_child.png'
-                        ),
-                      ),
-                    ],
+                        );
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
