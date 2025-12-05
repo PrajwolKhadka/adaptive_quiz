@@ -1,4 +1,5 @@
 import 'package:adaptive_quiz/screens/login_screen.dart';
+import 'package:adaptive_quiz/screens/onboarding_screen.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -27,7 +28,7 @@ class SplashScreen extends StatelessWidget {
           ),
         ),
       ),
-      nextScreen: LoginScreen(),
+      nextScreen: OnboardingScreen(),
       splashIconSize: double.infinity,
       backgroundColor: Colors.transparent,
       duration: 2500,
