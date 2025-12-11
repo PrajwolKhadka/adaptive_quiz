@@ -1,5 +1,5 @@
 import 'package:adaptive_quiz/common/my_snackbar.dart';
-import 'package:adaptive_quiz/screens/homepage_screen.dart';
+import 'package:adaptive_quiz/screens/bottom_screen/homepage_screen.dart';
 import 'package:adaptive_quiz/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 
