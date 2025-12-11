@@ -1,6 +1,6 @@
 import 'package:adaptive_quiz/common/navigation_bar.dart';
-import 'package:adaptive_quiz/screens/book_screen.dart';
-import 'package:adaptive_quiz/screens/homepage_screen.dart';
+import 'package:adaptive_quiz/screens/bottom_screen/book_screen.dart';
+import 'package:adaptive_quiz/screens/bottom_screen/homepage_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
@@ -13,19 +13,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [
-    HomeScreen(),
-    BookScreen(),
+  final List<Widget> pages = [
+    const HomeScreen(),
+    const BookScreen(),
     // ResultScreenPage(),
-    Center(child: Text("Books Page", style: TextStyle(fontSize: 28))),
     Center(child: Text("Results Page", style: TextStyle(fontSize: 28))),
   ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,20 +32,23 @@ class _MainScreenState extends State<MainScreen> {
           width: 120,
         ),
       ),
-      body: Stack(
-        children: [
-          _pages[_selectedIndex],
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: BottomNavBar(
-              selectedIndex: _selectedIndex,
-              onItemTapped: _onItemTapped,
-            ),
-          ),
-        ],
-      ),
+      body: pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+          items: const[
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(icon: Icon(Icons.menu_book_rounded), label: "Books"),
+            BottomNavigationBarItem(icon: Icon(Icons.assignment_rounded), label: "Result"),
+          ],
+        backgroundColor: Colors.white,
+        selectedItemColor: Color(0xFF88A4E0),
+        unselectedItemColor: Colors.black,
+        currentIndex: _selectedIndex,
+        onTap: (index){
+            setState(() {
+              _selectedIndex = index;
+            });
+        },
+      )
     );
   }
 }
