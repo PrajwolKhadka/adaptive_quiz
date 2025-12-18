@@ -86,10 +86,10 @@ ThemeData getApplicationTheme() {
       unselectedItemColor: Colors.grey,
       selectedLabelStyle: TextStyle(
         fontWeight: FontWeight.w600,
-        fontSize: 12,
+        fontSize: 14,
       ),
       unselectedLabelStyle: TextStyle(
-        fontSize: 12,
+        fontSize: 14,
       ),
       type: BottomNavigationBarType.fixed,
       elevation: 8,
