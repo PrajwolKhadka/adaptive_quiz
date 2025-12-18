@@ -1,3 +1,4 @@
+import 'package:adaptive_quiz/theme/theme_data.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/splash_screen.dart';
@@ -8,12 +9,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Apps for College',
+      title: 'Maanak',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: getApplicationTheme(),
       home: const SplashScreen(),
     );
   }
