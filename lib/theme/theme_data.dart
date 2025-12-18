@@ -51,7 +51,7 @@ ThemeData getApplicationTheme() {
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(
-          color: Colors.deepPurple,
+          color: Colors.blueAccent,
           width: 2,
         ),
       ),
