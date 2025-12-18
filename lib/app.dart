@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Maanak',
+      title: 'Maanak Quiz App',
       debugShowCheckedModeBanner: false,
       theme: getApplicationTheme(),
       home: const SplashScreen(),
