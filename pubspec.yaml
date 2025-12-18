@@ -80,6 +80,21 @@ flutter:
     - family: Freeman
       fonts:
         - asset: assets/fonts/freeman.ttf
+    - family: OpensansRegular
+      fonts:
+        - asset: assets/fonts/opensans/OpenSans-Regular.ttf
+    - family: OpensansMedium
+      fonts:
+        - asset: assets/fonts/opensans/OpenSans-Medium.ttf
+    - family: OpensansBold
+      fonts:
+        - asset: assets/fonts/opensans/OpenSans-Bold.ttf
+    - family: OpensansLight
+      fonts:
+        - asset: assets/fonts/opensans/OpenSans-Light.ttf
+
+
+
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
