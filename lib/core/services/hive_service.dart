@@ -1,40 +1,33 @@
 import 'package:adaptive_quiz/core/constants/hive_table_constant.dart';
-import 'package:hive/hive.dart';
-import '../../../features/auth/data/models/auth_hive_model.dart';
+import 'package:adaptive_quiz/features/auth/data/models/auth_hive_model.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveService {
-  Future<void> openBox() async {
+  Future<void> init() async {
+    await Hive.initFlutter();
+    Hive.registerAdapter(AuthHiveModelAdapter());
     await Hive.openBox<AuthHiveModel>(HiveTableConstant.userTable);
+
+    final box = Hive.box<AuthHiveModel>(HiveTableConstant.userTable);
+    if (box.isEmpty) {
+      box.addAll([
+        AuthHiveModel(
+            userId: '1', email: "kavya_ram121", password: "123456"),
+        AuthHiveModel(
+            userId: '2', email: "ops_sita232", password: "password"),
+      ]);
+    }
   }
 
-  Box<AuthHiveModel> get _authBox =>
-      Hive.box<AuthHiveModel>(HiveTableConstant.userTable);
+  Box<AuthHiveModel> get userBox => Hive.box<AuthHiveModel>(HiveTableConstant.userTable);
 
-  // DUMMY USERS
-  Future<void> seedUsers() async {
-    if (_authBox.isNotEmpty) return;
-
-    await _authBox.addAll([
-      AuthHiveModel(
-        userId: "1",
-        email: "admin@gmail.com",
-        password: "admin123",
-      ),
-      AuthHiveModel(
-        userId: "2",
-        email: "user@gmail.com",
-        password: "user123",
-      ),
-    ]);
-  }
-
-  // LOGIN
   AuthHiveModel? login(String email, String password) {
+    final box = userBox;
     try {
-      return _authBox.values.firstWhere(
-            (user) => user.email == email && user.password == password,
+      return box.values.firstWhere(
+            (u) => u.email == email && u.password == password,
       );
-    } catch (_) {
+    } catch (e) {
       return null;
     }
   }

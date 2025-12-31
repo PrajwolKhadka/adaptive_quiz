@@ -1,37 +1,47 @@
-import 'package:adaptive_quiz/screens/login_screen.dart';
 import 'package:adaptive_quiz/screens/onboarding_screen.dart';
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+import '../../../../core/services/user_session_service.dart';
+import '../../../auth/presentation/pages/login_screen.dart';
 
-class SplashScreen extends StatelessWidget {
+
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
-  get splash => null;
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  final UserSessionService sessionService = UserSessionService();
+
+  @override
+  void initState() {
+    super.initState();
+    _navigateToNext();
+  }
+
+  void _navigateToNext() async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    final isLoggedIn = await sessionService.isLoggedIn();
+    if (isLoggedIn) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const OnboardingScreen()));
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const LoginScreen()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return AnimatedSplashScreen(
-      splash: SizedBox.expand(
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFFFFFFFF),
-                Color(0xFFBEE1FA),
-              ],
-            ),
-          ),
-          child: Center(
-            child: Lottie.asset("assets/lottie/splash.json"),
-          ),
+    return Scaffold(
+      body: Center(
+        child: Text(
+          "Adaptive Quiz",
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),
-      nextScreen: OnboardingScreen(),
-      splashIconSize: double.infinity,
-      backgroundColor: Colors.transparent,
-      duration: 2500,
     );
   }
 }

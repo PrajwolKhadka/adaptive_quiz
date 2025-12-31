@@ -2,10 +2,7 @@ class AuthState {
   final bool isLoading;
   final String? error;
 
-  AuthState({
-    required this.isLoading,
-    this.error,
-  });
+  AuthState({required this.isLoading, this.error});
 
   factory AuthState.initial() => AuthState(isLoading: false);
 

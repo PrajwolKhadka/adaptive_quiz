@@ -1,22 +1,20 @@
+import 'package:adaptive_quiz/core/services/hive_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../state/auth_state.dart';
-import '../../domain/usecases/login_usecase.dart';
 
 class AuthViewModel extends Notifier<AuthState> {
-  late final LoginUsecase loginUsecase;
+  late final HiveService hiveService;
 
   @override
   AuthState build() {
-
+    hiveService = HiveService();
     return AuthState.initial();
   }
 
-  // Login function
-  bool login(String email, String password) {
-    // Set loading true
+  bool login(String username, String password) {
     state = state.copyWith(isLoading: true);
 
-    final user = loginUsecase(email, password);
+    final user = hiveService.login(username, password);
 
     if (user == null) {
       state = state.copyWith(isLoading: false, error: "Invalid credentials");
@@ -27,3 +25,7 @@ class AuthViewModel extends Notifier<AuthState> {
     return true;
   }
 }
+
+final authViewModelProvider = NotifierProvider<AuthViewModel, AuthState>(
+  () => AuthViewModel(),
+);
