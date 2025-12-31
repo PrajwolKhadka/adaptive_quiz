@@ -8,7 +8,7 @@ void main() async {
 
   // Initialize Hive and open boxes
   final hiveService = HiveService();
-  await hiveService.initHive();
+  await hiveService.init();
 
   // Wrap the app with ProviderScope for Riverpod
   runApp(

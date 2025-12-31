@@ -1,5 +1,5 @@
 import 'package:adaptive_quiz/features/auth/presentation/pages/login_screen.dart';
-import 'package:adaptive_quiz/screens/onboarding_screen.dart';
+import 'package:adaptive_quiz/features/onboarding/presentation/pages/onboarding_screen.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';

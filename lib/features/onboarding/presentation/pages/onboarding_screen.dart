@@ -1,4 +1,4 @@
-import 'package:adaptive_quiz/screens/onboard_page.dart';
+import 'package:adaptive_quiz/features/onboarding/presentation/pages/onboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:adaptive_quiz/features/auth/presentation/pages/login_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

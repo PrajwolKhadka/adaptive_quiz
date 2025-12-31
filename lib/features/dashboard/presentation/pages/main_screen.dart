@@ -1,6 +1,6 @@
 import 'package:adaptive_quiz/common/navigation_bar.dart';
-import 'package:adaptive_quiz/screens/bottom_screen/book_screen.dart';
-import 'package:adaptive_quiz/screens/bottom_screen/homepage_screen.dart';
+import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/book_screen.dart';
+import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/homepage_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
