@@ -1,4 +1,4 @@
-import 'package:adaptive_quiz/app.dart';
+import 'package:adaptive_quiz/app/app.dart';
 import 'package:flutter/material.dart';
 
 void main() {
