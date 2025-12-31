@@ -54,7 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SizedBox.expand(
-      child: Container(
+      child:Stack(
+        children: [Container(
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
@@ -255,6 +256,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
+      ),
+      ],
       ),
     );
   }
