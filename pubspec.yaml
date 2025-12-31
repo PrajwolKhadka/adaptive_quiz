@@ -120,6 +120,7 @@ flutter:
   assets:
     - assets/lottie/
     - assets/image/
+    - assets/svg/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

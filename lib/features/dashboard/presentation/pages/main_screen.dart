@@ -1,6 +1,7 @@
 import 'package:adaptive_quiz/common/navigation_bar.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/book_screen.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/homepage_screen.dart';
+import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -32,14 +33,23 @@ class _MainScreenState extends State<MainScreen> {
           'assets/image/logo.png',
           width: 120,
         ),
-        // actions: [
-        //   IconButton(onPressed:(){},
-        //       icon: const CircleAvatar(
-        //         radius: 19,
-        //         backgroundColor: Colors.white,
-        //         child: Icon(Icons.),
-        //       ))
-        // ],
+        actions: [
+          IconButton(onPressed:(){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ProfileScreen()),
+            );
+          },
+              icon: CircleAvatar(
+                radius: 40,
+                backgroundColor: Colors.white,
+                child: SvgPicture.asset(
+                  'assets/svg/profile.svg',
+                  width: 60,
+                  height:60,
+                ),
+              ))
+        ],
       ),
       body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
