@@ -6,15 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Hive and open boxes
   final hiveService = HiveService();
   await hiveService.init();
 
-  // Wrap the app with ProviderScope for Riverpod
   runApp(
     ProviderScope(
       overrides: [
-        // You can override providers here if needed
       ],
       child: const MyApp(),
     ),
