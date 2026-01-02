@@ -1,7 +1,8 @@
-import 'package:adaptive_quiz/theme/theme_data.dart';
+
+import 'package:adaptive_quiz/app/theme/theme_data.dart';
 import 'package:flutter/material.dart';
 
-import 'screens/splash_screen.dart';
+import '../features/splash/presentation/pages/splash_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

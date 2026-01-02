@@ -1,13 +1,41 @@
-import 'package:adaptive_quiz/features/auth/presentation/pages/login_screen.dart';
+import 'package:adaptive_quiz/features/dashboard/presentation/pages/main_screen.dart';
 import 'package:adaptive_quiz/features/onboarding/presentation/pages/onboarding_screen.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import '../../../../core/services/user_session_service.dart';
+import '../../../auth/presentation/pages/login_screen.dart';
 
-class SplashScreen extends StatelessWidget {
+
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
-  get splash => null;
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  final UserSessionService sessionService = UserSessionService();
+
+  @override
+  void initState() {
+    super.initState();
+    _navigateToNext();
+  }
+
+  void _navigateToNext() async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    final isLoggedIn = await sessionService.isLoggedIn();
+    if (isLoggedIn) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const MainScreen()));
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const OnboardingScreen()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
