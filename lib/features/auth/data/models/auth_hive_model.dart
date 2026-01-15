@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 
 part 'auth_hive_model.g.dart';
 
-@HiveType(typeId: 0) // Ensure typeId 0 is unique in your app
+@HiveType(typeId: 0)
 class AuthHiveModel {
   @HiveField(0)
   final String? studentId;
@@ -23,13 +23,14 @@ class AuthHiveModel {
 
   AuthHiveModel({
     this.studentId,
-    required this.fullName,
-    required this.email,
-    required this.className,
+    String? fullName,
+    String? email,
+    String? className,
     this.token,
-  });
+  })  : fullName = fullName ?? '',
+        email = email ?? '',
+        className = className ?? '';
 
-  // Initial constructor from Entity
   factory AuthHiveModel.fromEntity(AuthEntity entity) {
     return AuthHiveModel(
       studentId: entity.id,
@@ -40,14 +41,13 @@ class AuthHiveModel {
     );
   }
 
-  // Convert Hive Model back to Entity for the Domain Layer
   AuthEntity toEntity() {
     return AuthEntity(
       id: studentId,
       fullName: fullName,
       email: email,
       className: className,
-      isFirstLogin: false, // If it's in Hive, they've already moved past first login
+      isFirstLogin: false,
       token: token,
     );
   }

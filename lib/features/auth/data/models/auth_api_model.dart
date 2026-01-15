@@ -1,3 +1,5 @@
+import 'package:adaptive_quiz/features/auth/data/models/auth_hive_model.dart';
+import 'package:adaptive_quiz/features/auth/domain/entities/auth_response.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'auth_api_model.g.dart';
@@ -27,4 +29,25 @@ class AuthApiModel {
       _$AuthApiModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$AuthApiModelToJson(this);
+}
+
+extension AuthApiModelX on AuthApiModel {
+  // Convert API model to domain entity
+  AuthResponse toEntity() {
+    return AuthResponse(
+      token: token ?? '',
+      isFirstLogin: isFirstLogin,
+    );
+  }
+
+  // Convert API model to Hive model for local storage
+  AuthHiveModel toHiveModel() {
+    return AuthHiveModel(
+      studentId: id,
+      fullName: fullName,
+      email: email,
+      className: className,
+      token: token,
+    );
+  }
 }
