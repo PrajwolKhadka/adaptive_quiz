@@ -1,4 +1,4 @@
-import 'package:adaptive_quiz/core/services/hive_service.dart';
+import 'package:adaptive_quiz/core/services/hive/hive_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../state/auth_state.dart';
 

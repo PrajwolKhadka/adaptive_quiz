@@ -1,5 +1,5 @@
 import 'package:adaptive_quiz/app/app.dart';
-import 'package:adaptive_quiz/core/services/hive_service.dart';
+import 'package:adaptive_quiz/core/services/hive/hive_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

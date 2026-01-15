@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:adaptive_quiz/core/services/hive_service.dart';
-import 'package:adaptive_quiz/core/services/user_session_service.dart';
+import 'package:adaptive_quiz/core/services/hive/hive_service.dart';
+import 'package:adaptive_quiz/core/services/storage/user_session_service.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/pages/main_screen.dart';
 import '../../../../common/my_snackbar.dart';
 

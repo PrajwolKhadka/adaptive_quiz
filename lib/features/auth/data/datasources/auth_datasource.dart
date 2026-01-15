@@ -1,4 +1,4 @@
-import 'package:adaptive_quiz/core/services/hive_service.dart';
+import 'package:adaptive_quiz/core/services/hive/hive_service.dart';
 import 'package:adaptive_quiz/features/auth/data/models/auth_hive_model.dart';
 
 abstract interface class IAuthDatasource {

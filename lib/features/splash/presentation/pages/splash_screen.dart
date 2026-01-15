@@ -3,7 +3,7 @@ import 'package:adaptive_quiz/features/onboarding/presentation/pages/onboarding_
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import '../../../../core/services/user_session_service.dart';
+import '../../../../core/services/storage/user_session_service.dart';
 import '../../../auth/presentation/pages/login_screen.dart';
 
 
