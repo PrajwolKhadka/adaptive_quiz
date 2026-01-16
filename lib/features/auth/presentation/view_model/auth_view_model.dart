@@ -1,29 +1,51 @@
-import 'package:adaptive_quiz/core/services/hive_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:adaptive_quiz/features/auth/data/repositories/auth_repository.dart';
+import 'package:adaptive_quiz/features/auth/presentation/providers/auth_provider.dart';
 import '../state/auth_state.dart';
 
 class AuthViewModel extends Notifier<AuthState> {
-  late final HiveService hiveService;
+  late final IAuthRepository _authRepository;
 
   @override
   AuthState build() {
-    hiveService = HiveService();
+    _authRepository = ref.read(authRepositoryProvider);
     return AuthState.initial();
   }
 
-  bool login(String username, String password) {
-    state = state.copyWith(isLoading: true);
+  Future<void> login(
+    String email,
+    String password,
+    void Function(bool isFirstLogin, String token) onSuccess,
+  ) async {
+    state = state.copyWith(isLoading: true, error: null);
 
-    final user = hiveService.login(username, password);
+    try {
+      final result = await _authRepository.loginStudent(email, password);
 
-    if (user == null) {
-      state = state.copyWith(isLoading: false, error: "Invalid credentials");
-      return false;
+      result.fold(
+        (failure) {
+          state = state.copyWith(isLoading: false, error: failure.message);
+        },
+        (response) {
+          state = state.copyWith(isLoading: false, error: null);
+          onSuccess(response.isFirstLogin, response.token);
+        },
+      );
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
-
-    state = state.copyWith(isLoading: false, error: null);
-    return true;
   }
+  Future<void> changePassword(String newPassword) async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      await _authRepository.changePassword(newPassword);
+      state = state.copyWith(isLoading: false);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      rethrow;
+    }
+  }
+
 }
 
 final authViewModelProvider = NotifierProvider<AuthViewModel, AuthState>(

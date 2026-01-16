@@ -1,98 +1,60 @@
-import 'package:adaptive_quiz/features/auth/presentation/pages/change_password_screen.dart';
+import 'package:adaptive_quiz/common/my_snackbar.dart';
+import 'package:adaptive_quiz/core/services/storage/user_session_service.dart';
+import 'package:adaptive_quiz/features/auth/presentation/pages/login_screen.dart';
+import 'package:adaptive_quiz/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:adaptive_quiz/features/auth/presentation/view_model/auth_view_model.dart';
-import 'package:adaptive_quiz/features/auth/presentation/state/auth_state.dart';
-import 'package:adaptive_quiz/core/services/storage/user_session_service.dart';
-import 'package:adaptive_quiz/features/dashboard/presentation/pages/main_screen.dart';
-import '../../../../common/my_snackbar.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+class ChangePasswordScreen extends ConsumerStatefulWidget {
+  const ChangePasswordScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<ChangePasswordScreen> createState() =>
+      _ChangePasswordScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
+  final newPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   bool isLoading = false;
 
-  final UserSessionService sessionService = UserSessionService();
-
-  void handleLogin() async {
+  void handleChangePassword() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => isLoading = true);
 
-    // ref.read(authViewModelProvider.notifier).login(
-    //   emailController.text.trim(),
-    //   passwordController.text.trim(),
-    //       (isFirstLogin, token) async {
-    //     // Save session
-    //     await sessionService.saveUserSession(emailController.text.trim());
-    //
-    //     setState(() => isLoading = false);
-    //
-    //     showMySnackBar(context: context, message: "Login Successful");
-    //
-    //     Navigator.pushReplacement(
-    //       context,
-    //       MaterialPageRoute(builder: (_) => const MainScreen()),
-    //     );
-    //   },
-    // );
-    ref.read(authViewModelProvider.notifier).login(
-      emailController.text.trim(),
-      passwordController.text.trim(),
-      (isFirstLogin, token) async {
-        setState(() => isLoading = false);
-        await sessionService.saveUserSession(
-          emailController.text.trim(),
-          token,
-        );
-        if (isFirstLogin) {
-          // Send user to change password screen
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => ChangePasswordScreen()),
-          );
-        } else {
-          // Save session and go to main screen
-          await sessionService.saveUserSession(
-            emailController.text.trim(),
-            token,
-          );
+    try {
+      await ref
+          .read(authViewModelProvider.notifier)
+          .changePassword(newPasswordController.text.trim());
 
-          showMySnackBar(context: context, message: "Login Successful");
+      setState(() => isLoading = false);
 
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const MainScreen()),
-          );
-        }
-      },
-    );
+      showMySnackBar(
+        context: context,
+        message: "Password changed successfully",
+      );
+
+      final sessionService = UserSessionService();
+      await sessionService.clearSession();
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      );
+    } catch (e) {
+      setState(() => isLoading = false);
+      showMySnackBar(
+        context: context,
+        message: e.toString(),
+        color: Colors.red,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authViewModelProvider);
-
-    ref.listen<AuthState>(authViewModelProvider, (prev, next) {
-      if (next.error != null) {
-        setState(() => isLoading = false);
-        showMySnackBar(
-          context: context,
-          message: next.error!,
-          color: Colors.red,
-        );
-      }
-    });
-
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -118,48 +80,57 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     fit: BoxFit.contain,
                   ),
                   const SizedBox(height: 50),
+
                   const Text(
-                    "Sign in to your\nAccount",
+                    "Change your\nPassword",
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
+
                   const Text(
-                    "Enter your school provided username and password to login",
+                    "This is your first login. Please set a new password to continue.",
                     style: TextStyle(fontSize: 14, color: Colors.black),
                   ),
                   const SizedBox(height: 40),
+
                   TextFormField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      labelText: "Email",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    validator: (value) => value == null || value.isEmpty
-                        ? "Email required"
-                        : null,
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: passwordController,
+                    controller: newPasswordController,
                     obscureText: true,
                     decoration: InputDecoration(
-                      labelText: "Password",
+                      labelText: "New Password",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    validator: (value) => value == null || value.isEmpty
-                        ? "Password required"
-                        : null,
+                    validator: (v) =>
+                        v == null || v.isEmpty ? "Required" : null,
+                  ),
+                  const SizedBox(height: 20),
+
+                  TextFormField(
+                    controller: confirmPasswordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: "Confirm Password",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    validator: (v) {
+                      if (v == null || v.isEmpty) return "Required";
+                      if (v != newPasswordController.text) {
+                        return "Passwords do not match";
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 30),
+
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: isLoading ? null : handleLogin,
+                      onPressed: isLoading ? null : handleChangePassword,
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
                         backgroundColor: Colors.transparent,
@@ -184,7 +155,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   color: Colors.white,
                                 )
                               : const Text(
-                                  "Login",
+                                  "Change Password",
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.white,
