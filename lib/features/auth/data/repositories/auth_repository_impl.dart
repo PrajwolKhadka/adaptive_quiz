@@ -24,6 +24,22 @@ class AuthRepositoryImpl implements IAuthRepository {
 
       return Right(authApiModel.toEntity()); // Return the AuthResponse
     } catch (e) {
+      return Left(
+        ApiFailure(
+          message: e is Exception
+              ? e.toString().replaceFirst('Exception: ', '')
+              : 'Invalid credentials',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> changePassword(String newPassword) async{
+    try {
+      await _authRemoteDatasource.changePassword(newPassword);
+      return const Right(null);
+    } catch (e) {
       return Left(ApiFailure(message: e.toString()));
     }
   }

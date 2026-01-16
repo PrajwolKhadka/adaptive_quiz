@@ -10,7 +10,8 @@ import '../../../../core/providers/common_provider.dart';
 // 1. Data Sources
 final authRemoteDatasourceProvider = Provider<IAuthRemoteDatasource>((ref) {
   final apiClient = ref.read(apiClientProvider);
-  return AuthRemoteDatasource(apiClient);
+  final sessionService = ref.read(userSessionServiceProvider);
+  return AuthRemoteDatasource(apiClient, sessionService);
 });
 
 final authLocalDatasourceProvider = Provider<IAuthLocalDatasource>((ref) {

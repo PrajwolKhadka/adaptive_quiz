@@ -32,10 +32,20 @@ class AuthViewModel extends Notifier<AuthState> {
         },
       );
     } catch (e) {
-      // 🔥 THIS PREVENTS INFINITE LOADING
       state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
+  Future<void> changePassword(String newPassword) async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      await _authRepository.changePassword(newPassword);
+      state = state.copyWith(isLoading: false);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      rethrow;
+    }
+  }
+
 }
 
 final authViewModelProvider = NotifierProvider<AuthViewModel, AuthState>(

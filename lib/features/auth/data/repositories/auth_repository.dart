@@ -4,4 +4,5 @@ import '../../../../core/error/failure.dart';
 
 abstract interface class IAuthRepository {
   Future<Either<Failure, AuthResponse>> loginStudent(String email, String password);
+  Future<Either<Failure, void>> changePassword(String newPassword);
 }

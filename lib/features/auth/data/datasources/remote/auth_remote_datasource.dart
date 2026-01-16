@@ -1,17 +1,20 @@
 import 'package:adaptive_quiz/core/api/api_client.dart';
 import 'package:adaptive_quiz/core/api/api_endpoint.dart';
+import 'package:adaptive_quiz/core/services/storage/user_session_service.dart';
 import 'package:adaptive_quiz/features/auth/data/models/auth_api_model.dart';
 import 'package:dio/dio.dart';
 
 
 abstract interface class IAuthRemoteDatasource {
   Future<AuthApiModel> login(String email, String password);
+  Future<void> changePassword(String newPassword);
 }
 
 class AuthRemoteDatasource implements IAuthRemoteDatasource {
   final ApiClient _apiClient;
+  final UserSessionService _sessionService;
 
-  AuthRemoteDatasource(this._apiClient);
+  AuthRemoteDatasource(this._apiClient, this._sessionService);
 
   @override
   Future<AuthApiModel> login(String email, String password) async {
@@ -31,7 +34,25 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
         throw Exception("Login Failed");
       }
     } on DioException catch (e) {
-      throw Exception(e.message);
+      final message =
+          e.response?.data?['message'] ??
+              e.response?.data?['error'] ??
+              "Invalid credentials";
+
+      throw Exception(message);
     }
   }
+
+  @override
+  Future<void> changePassword(String newPassword) async {
+    final token = await _sessionService.getToken();
+    if (token == null) throw Exception("No token found. Please login again.");
+    await _apiClient.post(
+      ApiEndpoints.changePassword,
+      data: {'newPassword': newPassword},
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+
+    );
+  }
+
 }
