@@ -50,10 +50,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       passwordController.text.trim(),
       (isFirstLogin, token) async {
         setState(() => isLoading = false);
-        await sessionService.saveUserSession(
-          emailController.text.trim(),
-          token,
-        );
         if (isFirstLogin) {
           // Send user to change password screen
           Navigator.pushReplacement(
@@ -61,12 +57,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             MaterialPageRoute(builder: (_) => ChangePasswordScreen()),
           );
         } else {
-          // Save session and go to main screen
-          await sessionService.saveUserSession(
-            emailController.text.trim(),
-            token,
-          );
-
           showMySnackBar(context: context, message: "Login Successful");
 
           Navigator.pushReplacement(
