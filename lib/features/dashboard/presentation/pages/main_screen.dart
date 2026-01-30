@@ -1,18 +1,23 @@
+import 'dart:io';
+
 import 'package:adaptive_quiz/common/navigation_bar.dart';
+import 'package:adaptive_quiz/core/api/api_endpoint.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/book_screen.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/homepage_screen.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/profile_screen.dart';
+import 'package:adaptive_quiz/features/dashboard/presentation/providers/profile_viewmodel_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> pages = [
@@ -24,6 +29,21 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final profileState = ref.watch(profileViewModelProvider);
+
+    ImageProvider profileImage;
+
+    if (profileState.localImagePath != null) {
+      profileImage = FileImage(File(profileState.localImagePath!));
+    } else if (profileState.imageUrl != null) {
+      profileImage = NetworkImage(
+        profileState.imageUrl!.startsWith("http")
+            ? profileState.imageUrl!
+            : "${ApiEndpoints.baseUrl.replaceAll('/api/', '')}${profileState.imageUrl}",
+      );
+    } else {
+      profileImage = const AssetImage("assets/image/logo.png");
+    }
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -43,11 +63,7 @@ class _MainScreenState extends State<MainScreen> {
               icon: CircleAvatar(
                 radius: 40,
                 backgroundColor: Colors.white,
-                child: SvgPicture.asset(
-                  'assets/svg/profile.svg',
-                  width: 60,
-                  height:60,
-                ),
+                backgroundImage: profileImage,
               ))
         ],
       ),
