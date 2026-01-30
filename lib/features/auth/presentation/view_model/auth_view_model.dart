@@ -1,3 +1,4 @@
+import 'package:adaptive_quiz/features/dashboard/presentation/providers/profile_viewmodel_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:adaptive_quiz/features/auth/data/repositories/auth_repository.dart';
 import 'package:adaptive_quiz/features/auth/presentation/providers/auth_provider.dart';
@@ -36,7 +37,8 @@ class AuthViewModel extends Notifier<AuthState> {
             email: response.email,
             className: response.className,
           );
-
+          final profileVM = ref.read(profileViewModelProvider.notifier);
+          await profileVM.loadProfile();
           onSuccess(response.isFirstLogin, response.token);
         },
       );

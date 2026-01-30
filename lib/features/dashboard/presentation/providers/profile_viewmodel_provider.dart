@@ -3,6 +3,6 @@ import 'package:adaptive_quiz/features/dashboard/presentation/view_model/profile
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final profileViewModelProvider =
-NotifierProvider<ProfileViewModel, ProfileState>(
+NotifierProvider.autoDispose<ProfileViewModel, ProfileState>(
       () => ProfileViewModel(),
 );
