@@ -71,6 +71,17 @@ class UserSessionService {
     await prefs.setString(_keyLocalImagePath, path);
   }
 
+  Future<void> saveRemoteProfileImage(String imageUrl) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyImageUrl, imageUrl);
+  }
+
+  // Get remote image URL
+  Future<String?> getRemoteProfileImage() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyImageUrl);
+  }
+
   Future<Map<String, String?>> getProfileData() async {
     final prefs = await SharedPreferences.getInstance();
     return {
@@ -81,6 +92,7 @@ class UserSessionService {
       "localImagePath": prefs.getString(_keyLocalImagePath),
     };
   }
+
 
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();

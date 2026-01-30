@@ -6,6 +6,8 @@ class ApiEndpoints {
   // Auth Endpoints
   static const String login = "school/auth/student-login";
   static const String changePassword = "school/auth/change-password";
+  static const String uploadProfilePicture = "student/profile-picture";
+  static const String getProfile= "student/profile";
 
   // Quiz Endpoints
   static const String getQuestions = "quisz/questions";
