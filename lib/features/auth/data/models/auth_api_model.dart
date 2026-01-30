@@ -37,6 +37,10 @@ extension AuthApiModelX on AuthApiModel {
     return AuthResponse(
       token: token ?? '',
       isFirstLogin: isFirstLogin,
+      studentId: id ?? '',
+      fullName: fullName,
+      email: email,
+      className: className,
     );
   }
 

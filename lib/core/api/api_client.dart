@@ -49,4 +49,24 @@ class ApiClient {
       rethrow;
     }
   }
+
+  Future<Response> put(
+      String url, {
+        dynamic data,
+        Map<String, dynamic>? queryParameters,
+        Options? options,
+      }) async {
+    try {
+      final response = await _dio.put(
+        url,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+      );
+      return response;
+    } on DioException catch (e) {
+      rethrow;
+    }
+  }
+
 }

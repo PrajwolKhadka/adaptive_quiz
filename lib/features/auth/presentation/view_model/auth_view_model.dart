@@ -1,11 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:adaptive_quiz/features/auth/data/repositories/auth_repository.dart';
 import 'package:adaptive_quiz/features/auth/presentation/providers/auth_provider.dart';
+import '../../../../core/providers/common_provider.dart';
 import '../state/auth_state.dart';
 
 class AuthViewModel extends Notifier<AuthState> {
   late final IAuthRepository _authRepository;
-
+  late final session = ref.read(userSessionServiceProvider);
   @override
   AuthState build() {
     _authRepository = ref.read(authRepositoryProvider);
@@ -26,8 +27,16 @@ class AuthViewModel extends Notifier<AuthState> {
         (failure) {
           state = state.copyWith(isLoading: false, error: failure.message);
         },
-        (response) {
+        (response) async{
           state = state.copyWith(isLoading: false, error: null);
+          await session.saveStudentSession(
+            token: response.token,
+            studentId: response.studentId,
+            fullName: response.fullName,
+            email: response.email,
+            className: response.className,
+          );
+
           onSuccess(response.isFirstLogin, response.token);
         },
       );
