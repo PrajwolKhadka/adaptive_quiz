@@ -7,8 +7,9 @@
 //     required this.isFirstLogin,
 //   });
 // }
+import 'package:equatable/equatable.dart';
 
-class AuthResponse {
+class AuthResponse extends Equatable {
   final String studentId;
   final String fullName;
   final String email;
@@ -25,6 +26,27 @@ class AuthResponse {
     required this.token,
   });
 
+  // factory AuthResponse.fromJson(Map<String, dynamic> json) {
+  //   return AuthResponse(
+  //     studentId: json['studentId'],
+  //     fullName: json['fullName'],
+  //     email: json['email'],
+  //     className: json['className'],
+  //     isFirstLogin: json['isFirstLogin'],
+  //     token: json['token'],
+  //   );
+  // }
+
+  @override
+  List<Object?> get props => [
+    studentId,
+    fullName,
+    email,
+    className,
+    isFirstLogin,
+    token,
+  ];
+
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
     return AuthResponse(
       studentId: json['studentId'],
@@ -36,4 +58,3 @@ class AuthResponse {
     );
   }
 }
-

@@ -23,11 +23,11 @@ class AuthViewModel extends Notifier<AuthState> {
     try {
       final result = await _authRepository.loginStudent(email, password);
 
-      result.fold(
-        (failure) {
+      await result.fold(
+        (failure) async {
           state = state.copyWith(isLoading: false, error: failure.message);
         },
-        (response) async{
+        (response) async {
           state = state.copyWith(isLoading: false, error: null);
           await session.saveStudentSession(
             token: response.token,
@@ -44,6 +44,7 @@ class AuthViewModel extends Notifier<AuthState> {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
+
   Future<void> changePassword(String newPassword) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
@@ -54,7 +55,6 @@ class AuthViewModel extends Notifier<AuthState> {
       rethrow;
     }
   }
-
 }
 
 final authViewModelProvider = NotifierProvider<AuthViewModel, AuthState>(

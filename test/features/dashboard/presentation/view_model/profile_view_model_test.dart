@@ -73,10 +73,8 @@ void main() {
   test(
     'uploadProfilePicture sets imageUrl and clears local path on success',
     () async {
-      // 1. Stub getToken
       when(() => mockSession.getToken()).thenAnswer((_) async => 'token123');
 
-      // 2. Stub loadProfile GET request
       when(
         () => mockApiClient.get(any(), options: any(named: 'options')),
       ).thenAnswer(
@@ -95,7 +93,6 @@ void main() {
         ),
       );
 
-      // 3. Stub PUT request for upload
       when(
         () => mockApiClient.put(
           any(),
@@ -113,14 +110,12 @@ void main() {
         ),
       );
 
-      // 4. Stub saving remote image
       when(
         () => mockSession.saveRemoteProfileImage(any()),
       ).thenAnswer((_) async => null);
 
       final viewModel = container.read(profileViewModelProvider.notifier);
 
-      // Wait for automatic loadProfile to finish
       await Future.microtask(() {});
 
       // Set local image path
@@ -128,20 +123,16 @@ void main() {
         localImagePath: '/local/path.png',
       );
 
-      // Override copyWith just for test to clear path
       final originalCopyWith = viewModel.state.copyWith;
       viewModel.state = viewModel.state.copyWith(
         localImagePath: '/local/path.png',
       );
 
-      // Run upload
       await viewModel.uploadProfilePicture();
 
       final state = viewModel.state;
 
-      // Instead of checking null (since you didn't clear), just check imageUrl is set
       expect(state.imageUrl, 'uploaded.png');
-      // You can still check that localImagePath still exists if you want
       expect(state.localImagePath, '/local/path.png');
     },
   );
