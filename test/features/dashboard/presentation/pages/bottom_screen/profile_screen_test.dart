@@ -12,7 +12,6 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  /// Helper to wrap widget with Riverpod + MaterialApp
   Widget createWidget(ProfileState state) {
     return ProviderScope(
       overrides: [
@@ -42,10 +41,8 @@ void main() {
     expect(find.text('john@example.com'), findsOneWidget);
     expect(find.text('BSc CSIT'), findsOneWidget);
 
-    // Upload button should NOT appear
     expect(find.text('Upload Profile Picture'), findsNothing);
 
-    // Logout button exists
     expect(find.text('Logout'), findsOneWidget);
   });
 
@@ -86,7 +83,6 @@ class FakeProfileViewModel extends ProfileViewModel {
     return fakeState;
   }
 
-  // Override side-effect methods so nothing real runs
   @override
   Future<void> pickImage(_) async {}
 

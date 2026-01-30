@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 part 'auth_hive_model.g.dart';
 
 @HiveType(typeId: 0)
-class AuthHiveModel {
+class AuthHiveModel extends Equatable {
   @HiveField(0)
   final String? studentId;
 
@@ -27,10 +27,33 @@ class AuthHiveModel {
     String? email,
     String? className,
     this.token,
-  })  : fullName = fullName ?? '',
-        email = email ?? '',
-        className = className ?? '';
+  }) : fullName = fullName ?? '',
+       email = email ?? '',
+       className = className ?? '';
 
+  // factory AuthHiveModel.fromEntity(AuthEntity entity) {
+  //   return AuthHiveModel(
+  //     studentId: entity.id,
+  //     fullName: entity.fullName,
+  //     email: entity.email,
+  //     className: entity.className,
+  //     token: entity.token,
+  //   );
+  // }
+
+  // AuthEntity toEntity() {
+  //   return AuthEntity(
+  //     id: studentId,
+  //     fullName: fullName,
+  //     email: email,
+  //     className: className,
+  //     isFirstLogin: false,
+  //     token: token,
+  //   );
+  // }
+
+  @override
+  List<Object?> get props => [studentId, fullName, email, className, token];
   factory AuthHiveModel.fromEntity(AuthEntity entity) {
     return AuthHiveModel(
       studentId: entity.id,

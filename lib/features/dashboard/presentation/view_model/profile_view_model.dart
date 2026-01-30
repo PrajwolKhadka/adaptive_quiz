@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:adaptive_quiz/core/api/api_client.dart';
 import 'package:adaptive_quiz/core/api/api_endpoint.dart';
 import 'package:adaptive_quiz/features/auth/presentation/pages/login_screen.dart';
+import 'package:adaptive_quiz/features/auth/presentation/providers/auth_provider.dart';
+import 'package:adaptive_quiz/features/dashboard/presentation/providers/profile_viewmodel_provider.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/state/profile_state.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +25,7 @@ class ProfileViewModel extends Notifier<ProfileState> {
   ProfileState build() {
     _session = ref.read(userSessionServiceProvider);
     _apiClient = ref.read(apiClientProvider);
-    Future.microtask(() => loadProfile());
+    // Future.microtask(() => loadProfile());
     return ProfileState.initial();
   }
 
@@ -135,10 +137,22 @@ class ProfileViewModel extends Notifier<ProfileState> {
 
   Future<void> logout(BuildContext context) async {
     await _session.clearSession();
+
+    // ref.invalidate(profileViewModelProvider);
+    // ref.invalidate(authViewModelProvider);
+
+    imageCache.clear();
+    imageCache.clearLiveImages();
+
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (_) => const LoginScreen()),
       (_) => false,
     );
+
+    Future.microtask(() {
+      ref.invalidate(profileViewModelProvider);
+      ref.invalidate(authViewModelProvider);
+    });
   }
 }

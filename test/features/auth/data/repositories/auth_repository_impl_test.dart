@@ -6,9 +6,8 @@ import 'package:adaptive_quiz/features/auth/data/models/auth_api_model.dart';
 import 'package:adaptive_quiz/features/auth/data/models/auth_hive_model.dart';
 import 'package:adaptive_quiz/features/auth/domain/entities/auth_response.dart';
 import 'package:adaptive_quiz/core/error/failure.dart';
-import '../../../../mocks.dart'; // Your mock classes
+import '../../../../mocks.dart';
 
-// --- Fake for AuthHiveModel ---
 class FakeAuthHiveModel extends Fake implements AuthHiveModel {}
 
 void main() {
@@ -17,7 +16,6 @@ void main() {
   late MockAuthLocalDatasource mockLocal;
 
   setUpAll(() {
-    // Register fallback for any() calls with AuthHiveModel
     registerFallbackValue(FakeAuthHiveModel());
   });
 
@@ -71,7 +69,6 @@ void main() {
           (entity) => expect(entity, tEntityFirstLogin),
         );
         verify(() => mockRemote.login(tEmail, tPassword)).called(1);
-        // local save should NOT be called because isFirstLogin is true
         verifyNever(() => mockLocal.saveStudent(any()));
       },
     );

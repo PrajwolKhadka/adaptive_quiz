@@ -1,3 +1,4 @@
+import 'package:adaptive_quiz/features/dashboard/presentation/providers/profile_viewmodel_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:adaptive_quiz/features/auth/data/repositories/auth_repository.dart';
 import 'package:adaptive_quiz/features/auth/presentation/providers/auth_provider.dart';
@@ -23,11 +24,11 @@ class AuthViewModel extends Notifier<AuthState> {
     try {
       final result = await _authRepository.loginStudent(email, password);
 
-      result.fold(
-        (failure) {
+      await result.fold(
+        (failure) async {
           state = state.copyWith(isLoading: false, error: failure.message);
         },
-        (response) async{
+        (response) async {
           state = state.copyWith(isLoading: false, error: null);
           await session.saveStudentSession(
             token: response.token,
@@ -36,7 +37,8 @@ class AuthViewModel extends Notifier<AuthState> {
             email: response.email,
             className: response.className,
           );
-
+          final profileVM = ref.read(profileViewModelProvider.notifier);
+          await profileVM.loadProfile();
           onSuccess(response.isFirstLogin, response.token);
         },
       );
@@ -44,6 +46,7 @@ class AuthViewModel extends Notifier<AuthState> {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
+
   Future<void> changePassword(String newPassword) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
@@ -54,7 +57,6 @@ class AuthViewModel extends Notifier<AuthState> {
       rethrow;
     }
   }
-
 }
 
 final authViewModelProvider = NotifierProvider<AuthViewModel, AuthState>(
