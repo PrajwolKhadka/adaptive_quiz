@@ -25,7 +25,7 @@ class ProfileViewModel extends Notifier<ProfileState> {
   ProfileState build() {
     _session = ref.read(userSessionServiceProvider);
     _apiClient = ref.read(apiClientProvider);
-    // Future.microtask(() => loadProfile());
+    Future.microtask(() => loadProfile());
     return ProfileState.initial();
   }
 
@@ -49,6 +49,7 @@ class ProfileViewModel extends Notifier<ProfileState> {
     state = state.copyWith(isLoading: true);
 
     final token = await _session.getToken();
+    if (!ref.mounted) return;
     if (token == null) {
       state = state.copyWith(isLoading: false, error: "No token found");
       return;
@@ -63,6 +64,7 @@ class ProfileViewModel extends Notifier<ProfileState> {
           },
         ),
       );
+      if (!ref.mounted) return;
       print("Profile API response: ${response.data}");
       if (response.statusCode == 200 && response.data['success'] == true) {
         final data = response.data['data'];
@@ -83,6 +85,7 @@ class ProfileViewModel extends Notifier<ProfileState> {
         state = state.copyWith(isLoading: false, error: "Failed to load profile");
       }
     } catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(isLoading: false, error: "Error: $e");
     }
   }
@@ -108,6 +111,7 @@ class ProfileViewModel extends Notifier<ProfileState> {
       });
 
       final response = await _apiClient.put(
+
         ApiEndpoints.uploadProfilePicture,
         data: formData,
         options: Options(
@@ -115,6 +119,7 @@ class ProfileViewModel extends Notifier<ProfileState> {
           contentType: 'multipart/form-data',
         ),
       );
+      if (!ref.mounted) return;
 
       if (response.statusCode == 200 && response.data['success'] == true) {
         final imageUrl = response.data['data']['imageUrl'];
@@ -131,6 +136,7 @@ class ProfileViewModel extends Notifier<ProfileState> {
         );
       }
     } catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(isLoading: false, error: "Upload error: $e");
     }
   }
@@ -151,8 +157,11 @@ class ProfileViewModel extends Notifier<ProfileState> {
     );
 
     Future.microtask(() {
-      ref.invalidate(profileViewModelProvider);
-      ref.invalidate(authViewModelProvider);
+      if (ref.mounted) {
+        ref.invalidate(profileViewModelProvider);
+
+        ref.invalidate(authViewModelProvider);
+      }
     });
   }
 }
