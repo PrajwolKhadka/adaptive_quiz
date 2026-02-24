@@ -3,7 +3,7 @@ class ProfileState {
   final String? error;
   final String? fullName;
   final String? email;
-  final String? className;
+  final int? className;       // int to match backend
   final String? imageUrl;
   final String? localImagePath;
 
@@ -24,7 +24,7 @@ class ProfileState {
     String? error,
     String? fullName,
     String? email,
-    String? className,
+    int? className,
     String? imageUrl,
     String? localImagePath,
     bool clearLocalPath = false,
@@ -36,7 +36,6 @@ class ProfileState {
       email: email ?? this.email,
       className: className ?? this.className,
       imageUrl: imageUrl ?? this.imageUrl,
-      // localImagePath: localImagePath ?? this.localImagePath,
       localImagePath: clearLocalPath
           ? null
           : (localImagePath ?? this.localImagePath),

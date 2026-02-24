@@ -4,7 +4,7 @@ class AuthEntity extends Equatable {
   final String? id;
   final String fullName;
   final String email;
-  final String className;
+  final dynamic className;
   final bool isFirstLogin;
   final String? token;
 

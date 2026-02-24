@@ -1,28 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_api_model.dart';
+part of 'profile_api_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-AuthApiModel _$AuthApiModelFromJson(Map<String, dynamic> json) => AuthApiModel(
-      id: json['_id'] as String?,
+ProfileApiModel _$ProfileApiModelFromJson(Map<String, dynamic> json) =>
+    ProfileApiModel(
       fullName: json['fullName'] as String,
       email: json['email'] as String,
-      className: json['className'],
-      role: json['role'] as String,
+      className: (json['className'] as num).toInt(),
+      imageUrl: json['imageUrl'] as String?,
       isFirstLogin: json['isFirstLogin'] as bool,
-      token: json['token'] as String?,
     );
 
-Map<String, dynamic> _$AuthApiModelToJson(AuthApiModel instance) =>
+Map<String, dynamic> _$ProfileApiModelToJson(ProfileApiModel instance) =>
     <String, dynamic>{
-      '_id': instance.id,
       'fullName': instance.fullName,
       'email': instance.email,
       'className': instance.className,
-      'role': instance.role,
+      'imageUrl': instance.imageUrl,
       'isFirstLogin': instance.isFirstLogin,
-      'token': instance.token,
     };
