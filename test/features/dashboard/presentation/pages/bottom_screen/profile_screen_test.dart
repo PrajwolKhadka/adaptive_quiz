@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/profile_screen.dart';
+import 'package:adaptive_quiz/features/dashboard/presentation/providers/profile_provider.dart';
 // import 'package:adaptive_quiz/features/dashboard/presentation/pages/profile_screen.dart';
-import 'package:adaptive_quiz/features/dashboard/presentation/providers/profile_viewmodel_provider.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/state/profile_state.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ void main() {
       isLoading: false,
       fullName: 'John Doe',
       email: 'john@example.com',
-      className: 'BSc CSIT',
+      className: 10,
       imageUrl: null,
       localImagePath: null,
       error: null,
@@ -53,7 +53,7 @@ void main() {
       isLoading: false,
       fullName: 'Jane Doe',
       email: 'jane@example.com',
-      className: 'Class 10',
+      className: 10,
       localImagePath: '/fake/path/image.png',
       imageUrl: null,
       error: null,
