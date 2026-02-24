@@ -10,7 +10,7 @@ class ApiEndpoints {
   // static const String baseUrl = "http://10.0.2.2:5000/api/";
 
   // Configuration
-  static const bool isPhysicalDevice = false;
+  static const bool isPhysicalDevice = true;
   static const String _ipAddress = '192.168.1.70';
   static const int _port = 5000;
 
@@ -23,21 +23,29 @@ class ApiEndpoints {
   }
 
   static String get serverUrl => 'http://$_host:$_port';
-  static String get baseUrl => '$serverUrl/api/v1';
+  static String get baseUrl => '$serverUrl/api/';
   static String get mediaServerUrl => serverUrl;
 
   // Timeouts
   static const Duration connectionTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
-  // Auth Endpoints
-  static const String login = "school/auth/student-login";
-  static const String changePassword = "school/auth/change-password";
-  static const String uploadProfilePicture = "student/profile-picture";
-  static const String getProfile= "student/profile";
 
-  // Quiz Endpoints
+  // Auth related sab ko sab endpoints
+  static const String login = "/school/auth/student-login";
+  static const String changePassword = "/school/auth/change-password";
+  static const String uploadProfilePicture = "/student/profile-picture";
+  static const String getProfile= "/student/profile";
+
+  // Quiz Endpoints yeta xa
   static const String getQuestions = "quisz/questions";
 
+
+  //Resources Endpoints yeta xa
+  static const String getResources = "/resources/student-resources";
+
+
+  //Results ko endpoints yetta xa
+  static const String getMyResults = "results/student/results";
   // Constant for connection timeout
   // static const Duration connectionTimeout = Duration(seconds: 10);
   // static const Duration receiveTimeout = Duration(seconds: 10);

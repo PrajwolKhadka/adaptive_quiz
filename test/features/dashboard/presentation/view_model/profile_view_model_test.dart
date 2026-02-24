@@ -1,5 +1,6 @@
 import 'package:adaptive_quiz/core/providers/common_provider.dart';
-import 'package:adaptive_quiz/features/dashboard/presentation/providers/profile_viewmodel_provider.dart';
+import 'package:adaptive_quiz/features/dashboard/presentation/providers/profile_provider.dart';
+// import 'package:adaptive_quiz/features/dashboard/presentation/providers/profile_viewmodel_provider.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/state/profile_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

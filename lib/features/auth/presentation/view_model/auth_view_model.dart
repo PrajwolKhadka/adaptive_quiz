@@ -1,8 +1,8 @@
-import 'package:adaptive_quiz/features/dashboard/presentation/providers/profile_viewmodel_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:adaptive_quiz/features/auth/data/repositories/auth_repository.dart';
 import 'package:adaptive_quiz/features/auth/presentation/providers/auth_provider.dart';
 import '../../../../core/providers/common_provider.dart';
+import '../../../dashboard/presentation/providers/profile_provider.dart';
 import '../state/auth_state.dart';
 
 class AuthViewModel extends Notifier<AuthState> {

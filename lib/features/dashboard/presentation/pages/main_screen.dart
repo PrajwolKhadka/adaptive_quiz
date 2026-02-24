@@ -5,10 +5,13 @@ import 'package:adaptive_quiz/core/api/api_endpoint.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/book_screen.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/homepage_screen.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/profile_screen.dart';
-import 'package:adaptive_quiz/features/dashboard/presentation/providers/profile_viewmodel_provider.dart';
+import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/result_screen_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../providers/profile_provider.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
@@ -23,8 +26,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   final List<Widget> pages = [
     const HomeScreen(),
     const BookScreen(),
-    // ResultScreenPage(),
-    Center(child: Text("Results Page", style: TextStyle(fontSize: 28))),
+    const ResultScreen(),
+    // Center(child: Text("Results Page", style: TextStyle(fontSize: 28))),
   ];
 
   @override

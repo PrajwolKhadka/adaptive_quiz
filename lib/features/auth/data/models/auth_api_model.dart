@@ -10,7 +10,7 @@ class AuthApiModel {
   final String? id;
   final String fullName;
   final String email;
-  final String className;
+  final dynamic className;
   final String role;
   final bool isFirstLogin;
   final String? token;

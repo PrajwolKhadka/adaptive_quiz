@@ -18,6 +18,7 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
 
   @override
   Future<AuthApiModel> login(String email, String password) async {
+    print("CALLING URL: ${ApiEndpoints.baseUrl}/${ApiEndpoints.login}");
     try {
       Response response = await _apiClient.post(
         ApiEndpoints.login,
@@ -28,18 +29,32 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
       );
 
       if (response.statusCode == 200) {
+        print("FULL RESPONSE: ${response.data}");
+        final data = response.data['data'] as Map<String, dynamic>;
+        final token = response.data['token'] as String;
+        print("DATA: $data");  // add this
+        print("TOKEN: $token");
         // Convert the JSON response to your Model
-        return AuthApiModel.fromJson(response.data);
+        return AuthApiModel.fromJson({
+          ...data,
+          'token': token,
+          'className' : data['className'].toString(),
+        });
       } else {
         throw Exception("Login Failed");
       }
     } on DioException catch (e) {
-      final message =
-          e.response?.data?['message'] ??
-              e.response?.data?['error'] ??
-              "Invalid credentials";
-
+      print("DIO TYPE: ${e.type}");
+      print("DIO MESSAGE: ${e.message}");
+      print("DIO STATUS: ${e.response?.statusCode}");
+      print("DIO RESPONSE: ${e.response?.data}");
+      final message = e.response?.data?['message'] ??
+          e.response?.data?['error'] ??
+          "Invalid credentials";
       throw Exception(message);
+    } catch (e) {
+      print("OTHER ERROR: $e");
+      rethrow;
     }
   }
 
