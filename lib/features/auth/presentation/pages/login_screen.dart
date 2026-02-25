@@ -1,4 +1,200 @@
+// import 'package:adaptive_quiz/features/auth/presentation/pages/change_password_screen.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:adaptive_quiz/features/auth/presentation/view_model/auth_view_model.dart';
+// import 'package:adaptive_quiz/features/auth/presentation/state/auth_state.dart';
+// import 'package:adaptive_quiz/core/services/storage/user_session_service.dart';
+// import 'package:adaptive_quiz/features/dashboard/presentation/pages/main_screen.dart';
+// import '../../../../common/my_snackbar.dart';
+//
+// class LoginScreen extends ConsumerStatefulWidget {
+//   const LoginScreen({super.key});
+//
+//   @override
+//   ConsumerState<LoginScreen> createState() => _LoginScreenState();
+// }
+//
+// class _LoginScreenState extends ConsumerState<LoginScreen> {
+//   final _formKey = GlobalKey<FormState>();
+//   final TextEditingController emailController = TextEditingController();
+//   final TextEditingController passwordController = TextEditingController();
+//
+//   bool isLoading = false;
+//
+//   final UserSessionService sessionService = UserSessionService();
+//
+//   void handleLogin() async {
+//     if (!_formKey.currentState!.validate()) return;
+//
+//     setState(() => isLoading = true);
+//
+//     // ref.read(authViewModelProvider.notifier).login(
+//     //   emailController.text.trim(),
+//     //   passwordController.text.trim(),
+//     //       (isFirstLogin, token) async {
+//     //     // Save session
+//     //     await sessionService.saveUserSession(emailController.text.trim());
+//     //
+//     //     setState(() => isLoading = false);
+//     //
+//     //     showMySnackBar(context: context, message: "Login Successful");
+//     //
+//     //     Navigator.pushReplacement(
+//     //       context,
+//     //       MaterialPageRoute(builder: (_) => const MainScreen()),
+//     //     );
+//     //   },
+//     // );
+//     ref.read(authViewModelProvider.notifier).login(
+//       emailController.text.trim(),
+//       passwordController.text.trim(),
+//       (isFirstLogin, token) async {
+//         setState(() => isLoading = false);
+//         if (isFirstLogin) {
+//           // Send user to change password screen
+//           Navigator.pushReplacement(
+//             context,
+//             MaterialPageRoute(builder: (_) => ChangePasswordScreen()),
+//           );
+//         } else {
+//           showMySnackBar(context: context, message: "Login Successful");
+//
+//           Navigator.pushReplacement(
+//             context,
+//             MaterialPageRoute(builder: (_) => const MainScreen()),
+//           );
+//         }
+//       },
+//     );
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final authState = ref.watch(authViewModelProvider);
+//
+//     ref.listen<AuthState>(authViewModelProvider, (prev, next) {
+//       if (next.error != null) {
+//         setState(() => isLoading = false);
+//         showMySnackBar(
+//           context: context,
+//           message: next.error!,
+//           color: Colors.red,
+//         );
+//       }
+//     });
+//
+//     return Scaffold(
+//       body: Container(
+//         width: double.infinity,
+//         height: double.infinity,
+//         decoration: const BoxDecoration(
+//           gradient: LinearGradient(
+//             begin: Alignment.topCenter,
+//             end: Alignment.bottomCenter,
+//             colors: [Color(0xFFFFFFFF), Color(0xFFBEE1FA)],
+//           ),
+//         ),
+//         child: SafeArea(
+//           child: SingleChildScrollView(
+//             padding: const EdgeInsets.fromLTRB(24, 100, 24, 0),
+//             child: Form(
+//               key: _formKey,
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Image.asset(
+//                     'assets/image/logo.png',
+//                     height: 80,
+//                     fit: BoxFit.contain,
+//                   ),
+//                   const SizedBox(height: 50),
+//                   const Text(
+//                     "Sign in to your\nAccount",
+//                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+//                   ),
+//                   const SizedBox(height: 10),
+//                   const Text(
+//                     "Enter your school provided username and password to login",
+//                     style: TextStyle(fontSize: 14, color: Colors.black),
+//                   ),
+//                   const SizedBox(height: 40),
+//                   TextFormField(
+//                     controller: emailController,
+//                     decoration: InputDecoration(
+//                       labelText: "Email",
+//                       border: OutlineInputBorder(
+//                         borderRadius: BorderRadius.circular(12),
+//                       ),
+//                     ),
+//                     validator: (value) => value == null || value.isEmpty
+//                         ? "Email required"
+//                         : null,
+//                   ),
+//                   const SizedBox(height: 20),
+//                   TextFormField(
+//                     controller: passwordController,
+//                     obscureText: true,
+//                     decoration: InputDecoration(
+//                       labelText: "Password",
+//                       border: OutlineInputBorder(
+//                         borderRadius: BorderRadius.circular(12),
+//                       ),
+//                     ),
+//                     validator: (value) => value == null || value.isEmpty
+//                         ? "Password required"
+//                         : null,
+//                   ),
+//                   const SizedBox(height: 30),
+//                   SizedBox(
+//                     width: double.infinity,
+//                     height: 50,
+//                     child: ElevatedButton(
+//                       onPressed: isLoading ? null : handleLogin,
+//                       style: ElevatedButton.styleFrom(
+//                         padding: EdgeInsets.zero,
+//                         backgroundColor: Colors.transparent,
+//                         shadowColor: Colors.transparent,
+//                         shape: RoundedRectangleBorder(
+//                           borderRadius: BorderRadius.circular(12),
+//                         ),
+//                       ),
+//                       child: Ink(
+//                         decoration: BoxDecoration(
+//                           gradient: const LinearGradient(
+//                             colors: [Color(0xFF5DA0FF), Color(0xFF1D61E7)],
+//                             begin: Alignment.topCenter,
+//                             end: Alignment.bottomCenter,
+//                           ),
+//                           borderRadius: BorderRadius.circular(12),
+//                         ),
+//                         child: Container(
+//                           alignment: Alignment.center,
+//                           child: isLoading
+//                               ? const CircularProgressIndicator(
+//                                   color: Colors.white,
+//                                 )
+//                               : const Text(
+//                                   "Login",
+//                                   style: TextStyle(
+//                                     fontSize: 18,
+//                                     color: Colors.white,
+//                                   ),
+//                                 ),
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 import 'package:adaptive_quiz/features/auth/presentation/pages/change_password_screen.dart';
+import 'package:adaptive_quiz/features/auth/presentation/pages/forgotpassword_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:adaptive_quiz/features/auth/presentation/view_model/auth_view_model.dart';
@@ -20,45 +216,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   bool isLoading = false;
+  bool _obscurePassword = true;
 
   final UserSessionService sessionService = UserSessionService();
 
   void handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
-
     setState(() => isLoading = true);
 
-    // ref.read(authViewModelProvider.notifier).login(
-    //   emailController.text.trim(),
-    //   passwordController.text.trim(),
-    //       (isFirstLogin, token) async {
-    //     // Save session
-    //     await sessionService.saveUserSession(emailController.text.trim());
-    //
-    //     setState(() => isLoading = false);
-    //
-    //     showMySnackBar(context: context, message: "Login Successful");
-    //
-    //     Navigator.pushReplacement(
-    //       context,
-    //       MaterialPageRoute(builder: (_) => const MainScreen()),
-    //     );
-    //   },
-    // );
     ref.read(authViewModelProvider.notifier).login(
       emailController.text.trim(),
       passwordController.text.trim(),
-      (isFirstLogin, token) async {
+          (isFirstLogin, token) async {
         setState(() => isLoading = false);
         if (isFirstLogin) {
-          // Send user to change password screen
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (_) => ChangePasswordScreen()),
           );
         } else {
           showMySnackBar(context: context, message: "Login Successful");
-
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (_) => const MainScreen()),
@@ -70,8 +247,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authViewModelProvider);
-
     ref.listen<AuthState>(authViewModelProvider, (prev, next) {
       if (next.error != null) {
         setState(() => isLoading = false);
@@ -85,110 +260,210 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     return Scaffold(
       body: Container(
-        width: double.infinity,
         height: double.infinity,
+        width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFFFFFFFF), Color(0xFFBEE1FA)],
+            colors: [
+              Color(0xFFFFFFFF),
+              Color(0xFFBEE1FA),
+            ],
           ),
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24, 100, 24, 0),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 48),
+
+                  // Logo
                   Image.asset(
                     'assets/image/logo.png',
-                    height: 80,
+                    height: 72,
                     fit: BoxFit.contain,
                   ),
-                  const SizedBox(height: 50),
+
+                  const SizedBox(height: 48),
+
+                  // Headline
                   const Text(
-                    "Sign in to your\nAccount",
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                    "Sign in to your\naccount",
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF111827),
+                      height: 1.1,
+                      letterSpacing: -0.8,
+                    ),
                   ),
+
                   const SizedBox(height: 10),
+
                   const Text(
-                    "Enter your school provided username and password to login",
-                    style: TextStyle(fontSize: 14, color: Colors.black),
+                    "Enter your school-provided credentials to continue.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF6B7280),
+                      height: 1.5,
+                    ),
                   ),
+
                   const SizedBox(height: 40),
+
+                  // Email field
+                  _fieldLabel("Email address"),
+                  const SizedBox(height: 8),
                   TextFormField(
                     controller: emailController,
-                    decoration: InputDecoration(
-                      labelText: "Email",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    validator: (value) => value == null || value.isEmpty
-                        ? "Email required"
-                        : null,
+                    keyboardType: TextInputType.emailAddress,
+                    style: const TextStyle(
+                        fontSize: 15, color: Color(0xFF111827)),
+                    decoration: _inputDecoration("you@school.edu"),
+                    validator: (v) =>
+                    v == null || v.isEmpty ? "Email is required" : null,
                   ),
+
                   const SizedBox(height: 20),
+
+                  // Password field
+                  _fieldLabel("Password"),
+                  const SizedBox(height: 8),
                   TextFormField(
                     controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Password",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    validator: (value) => value == null || value.isEmpty
-                        ? "Password required"
-                        : null,
-                  ),
-                  const SizedBox(height: 30),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: isLoading ? null : handleLogin,
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    obscureText: _obscurePassword,
+                    style: const TextStyle(
+                        fontSize: 15, color: Color(0xFF111827)),
+                    decoration: _inputDecoration("••••••••").copyWith(
+                      suffixIcon: GestureDetector(
+                        onTap: () => setState(
+                                () => _obscurePassword = !_obscurePassword),
+                        child: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          color: const Color(0xFF9CA3AF),
+                          size: 20,
                         ),
                       ),
-                      child: Ink(
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF5DA0FF), Color(0xFF1D61E7)],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
+                    ),
+                    validator: (v) =>
+                    v == null || v.isEmpty ? "Password is required" : null,
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  // Forgot password link
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const ForgotPasswordScreen()),
+                      ),
+                      child: const Text(
+                        "Forgot password?",
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF1D61E7),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // Login button
+                  GestureDetector(
+                    onTap: isLoading ? null : handleLogin,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      width: double.infinity,
+                      height: 54,
+                      decoration: BoxDecoration(
+                        color: isLoading
+                            ? const Color(0xFF6B7280)
+                            : const Color(0xFF111827),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Center(
+                        child: isLoading
+                            ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.5,
+                            color: Colors.white,
                           ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: isLoading
-                              ? const CircularProgressIndicator(
-                                  color: Colors.white,
-                                )
-                              : const Text(
-                                  "Login",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white,
-                                  ),
-                                ),
+                        )
+                            : const Text(
+                          "Sign In",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.2,
+                          ),
                         ),
                       ),
                     ),
                   ),
+
+                  const SizedBox(height: 40),
                 ],
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _fieldLabel(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF374151),
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration(String hint) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: const TextStyle(color: Color(0xFFD1D5DB), fontSize: 15),
+      contentPadding:
+      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      filled: true,
+      fillColor: const Color(0xFFF9FAFB),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide:
+        const BorderSide(color: Color(0xFFE5E7EB), width: 1.5),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide:
+        const BorderSide(color: Color(0xFF1D61E7), width: 1.5),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide:
+        const BorderSide(color: Color(0xFFEF4444), width: 1.5),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide:
+        const BorderSide(color: Color(0xFFEF4444), width: 1.5),
       ),
     );
   }
