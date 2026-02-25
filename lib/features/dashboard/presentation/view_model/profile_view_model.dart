@@ -109,4 +109,5 @@ class ProfileViewModel extends Notifier<ProfileState> {
       }
     });
   }
+
 }
