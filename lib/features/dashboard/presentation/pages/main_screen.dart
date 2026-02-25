@@ -23,12 +23,12 @@ class MainScreen extends ConsumerStatefulWidget {
 class _MainScreenState extends ConsumerState<MainScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> pages = [
-    const HomeScreen(),
-    const BookScreen(),
-    const ResultScreen(),
-    // Center(child: Text("Results Page", style: TextStyle(fontSize: 28))),
-  ];
+  // final List<Widget> pages = [
+  //   const HomeScreen(),
+  //   const BookScreen(),
+  //   const ResultScreen(),
+  //   // Center(child: Text("Results Page", style: TextStyle(fontSize: 28))),
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               ))
         ],
       ),
-      body: pages[_selectedIndex],
+      // body: pages[_selectedIndex],
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: const [
+            HomeScreen(),
+            BookScreen(),
+            ResultScreen(),
+          ],
+        ),
       bottomNavigationBar: BottomNavigationBar(
           items: const[
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),

@@ -35,9 +35,14 @@ class ApiEndpoints {
   static const String changePassword = "/school/auth/change-password";
   static const String uploadProfilePicture = "/student/profile-picture";
   static const String getProfile= "/student/profile";
+  static const String forgotPassword = "/school/auth/student-forgot-password";
+  static const String resetPassword = "/school/auth/student-reset-password";
 
   // Quiz Endpoints yeta xa
-  static const String getQuestions = "quisz/questions";
+  static const String getQuiz = "/student/quiz";
+  static const String getActiveQuiz = "/student/active-quiz";
+  static const String submitAnswer = "/student/submit-answer";
+  static const String nextQuestion = "/student/next-question";
 
 
   //Resources Endpoints yeta xa
