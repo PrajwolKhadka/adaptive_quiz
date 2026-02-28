@@ -1,4 +1,5 @@
 
+import 'package:adaptive_quiz/app/splash_router.dart';
 import 'package:adaptive_quiz/app/theme/theme_data.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,8 @@ class MyApp extends StatelessWidget {
       title: 'Maanak Quiz App',
       debugShowCheckedModeBanner: false,
       theme: getApplicationTheme(),
-      home: const SplashScreen(),
+      // home: const SplashScreen(),
+      home: const SplashRouter(),
     );
   }
 }

@@ -7,7 +7,6 @@ import '../../domain/usecases/get_student_resources_usecase.dart';
 import '../state/resource_state.dart';
 import '../view_model/resource_view_model.dart';
 
-// 1. Remote Datasource
 final resourceRemoteDatasourceProvider =
 Provider<IResourceRemoteDatasource>((ref) {
   return ResourceRemoteDatasource(
@@ -16,18 +15,15 @@ Provider<IResourceRemoteDatasource>((ref) {
   );
 });
 
-// 2. Repository
 final resourceRepositoryProvider = Provider<IResourceRepository>((ref) {
   return ResourceRepositoryImpl(ref.read(resourceRemoteDatasourceProvider));
 });
 
-// 3. Use Case
 final getStudentResourcesUsecaseProvider =
 Provider<GetStudentResourcesUsecase>((ref) {
   return GetStudentResourcesUsecase(ref.read(resourceRepositoryProvider));
 });
 
-// 4. ViewModel
 final resourceViewModelProvider =
 NotifierProvider<ResourceViewModel, ResourceState>(
       () => ResourceViewModel(),

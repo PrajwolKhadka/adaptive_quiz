@@ -8,7 +8,7 @@ import '../../domain/usecases/upload_profile_picture_usecase.dart';
 import '../state/profile_state.dart';
 import '../view_model/profile_view_model.dart';
 
-// 1. Remote Datasource
+//  Remote Datasource
 final profileRemoteDatasourceProvider = Provider<IProfileRemoteDatasource>((ref) {
   return ProfileRemoteDatasource(
     ref.read(apiClientProvider),
@@ -16,14 +16,14 @@ final profileRemoteDatasourceProvider = Provider<IProfileRemoteDatasource>((ref)
   );
 });
 
-// 2. Repository
+//Repository
 final profileRepositoryProvider = Provider<IProfileRepository>((ref) {
   return ProfileRepositoryImpl(
     ref.read(profileRemoteDatasourceProvider),
   );
 });
 
-// 3. Use Cases
+// Use Cases
 final getProfileUsecaseProvider = Provider<GetProfileUsecase>((ref) {
   return GetProfileUsecase(ref.read(profileRepositoryProvider));
 });
@@ -32,7 +32,7 @@ final uploadProfilePictureUsecaseProvider = Provider<UploadProfilePictureUsecase
   return UploadProfilePictureUsecase(ref.read(profileRepositoryProvider));
 });
 
-// 4. ViewModel
+// ViewModel
 final profileViewModelProvider =
 NotifierProvider.autoDispose<ProfileViewModel, ProfileState>(
       () => ProfileViewModel(),

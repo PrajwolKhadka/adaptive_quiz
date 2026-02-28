@@ -17,7 +17,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   @override
   void initState() {
     super.initState();
-    // If quiz already completed this session, skip lobby → show result
+    // If quiz already completed this session, skip lobby show result
     final existing = ref.read(quizViewModelProvider);
     if (existing.result != null) {
       Future.microtask(
@@ -60,9 +60,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   }
 }
 
-// ─────────────────────────────────────────────
-// Loading
-// ─────────────────────────────────────────────
 class _LoadingView extends StatelessWidget {
   const _LoadingView();
 
@@ -95,9 +92,6 @@ class _LoadingView extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
-// Lobby
-// ─────────────────────────────────────────────
 class _LobbyView extends ConsumerWidget {
   final QuizState state;
   const _LobbyView({required this.state});
@@ -124,7 +118,6 @@ class _LobbyView extends ConsumerWidget {
         children: [
           const SizedBox(height: 32),
 
-          // Back button
           GestureDetector(
             onTap: () => Navigator.pop(context),
             child: const Icon(Icons.arrow_back, color: Color(0xFF111827)),
@@ -170,7 +163,6 @@ class _LobbyView extends ConsumerWidget {
 
           const SizedBox(height: 28),
 
-          // Info row
           Row(
             children: [
               if (timeLeft.isNotEmpty) ...[
@@ -203,7 +195,6 @@ class _LobbyView extends ConsumerWidget {
 
           const Spacer(),
 
-          // Start button
           GestureDetector(
             onTap: () =>
                 ref.read(quizViewModelProvider.notifier).startQuiz(),
@@ -235,9 +226,6 @@ class _LobbyView extends ConsumerWidget {
   }
 }
 
-// ─────────────────────────────────────────────
-// No Quiz
-// ─────────────────────────────────────────────
 class _NoQuizView extends ConsumerWidget {
   const _NoQuizView();
 
@@ -303,9 +291,6 @@ class _NoQuizView extends ConsumerWidget {
   }
 }
 
-// ─────────────────────────────────────────────
-// Question
-// ─────────────────────────────────────────────
 class _QuestionView extends ConsumerWidget {
   final QuizState state;
   const _QuestionView({required this.state});
@@ -327,12 +312,10 @@ class _QuestionView extends ConsumerWidget {
 
     return Column(
       children: [
-        // ── Top bar ──────────────────────────────────────────────
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: Row(
             children: [
-              // Progress fraction
               RichText(
                 text: TextSpan(
                   children: [
@@ -355,7 +338,6 @@ class _QuestionView extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 14),
-              // Progress bar
               Expanded(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(4),
@@ -391,10 +373,8 @@ class _QuestionView extends ConsumerWidget {
 
         const SizedBox(height: 8),
 
-        // Divider
         const Divider(color: Color(0xFFF3F4F6), height: 1),
 
-        // ── Scrollable body ──────────────────────────────────────
         Expanded(
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
@@ -559,7 +539,6 @@ class _QuestionView extends ConsumerWidget {
 
                 const SizedBox(height: 8),
 
-                // Feedback + Next
                 if (answered) ...[
                   const SizedBox(height: 4),
                   Container(
@@ -619,9 +598,6 @@ class _QuestionView extends ConsumerWidget {
   }
 }
 
-// ─────────────────────────────────────────────
-// Result
-// ─────────────────────────────────────────────
 class _ResultView extends ConsumerWidget {
   final QuizState state;
   const _ResultView({required this.state});
@@ -713,7 +689,6 @@ class _ResultView extends ConsumerWidget {
 
           const SizedBox(height: 32),
 
-          // Thin divider
           const Divider(color: Color(0xFFF3F4F6)),
 
           const SizedBox(height: 24),
@@ -821,9 +796,6 @@ class _ResultView extends ConsumerWidget {
   );
 }
 
-// ─────────────────────────────────────────────
-// Error
-// ─────────────────────────────────────────────
 class _ErrorView extends ConsumerWidget {
   final QuizState state;
   const _ErrorView({required this.state});
