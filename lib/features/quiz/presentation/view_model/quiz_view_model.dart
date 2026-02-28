@@ -42,7 +42,6 @@ class QuizViewModel extends Notifier<QuizState> {
     );
   }
 
-  // If quiz already completed this session, jump straight to result
   void showExistingResult() {
     if (state.result != null) {
       state = state.copyWith(status: QuizStatus.finished);
