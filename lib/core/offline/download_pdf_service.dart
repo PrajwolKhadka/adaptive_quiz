@@ -3,11 +3,10 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Represents a PDF that has been saved permanently on the device.
 class DownloadedPdf {
-  final String id;        // unique key (url-based)
+  final String id;
   final String title;
-  final String localPath; // permanent file path
+  final String localPath;
   final DateTime savedAt;
 
   DownloadedPdf({
@@ -35,7 +34,6 @@ class DownloadedPdf {
 class DownloadedPdfService {
   static const _key = 'downloaded_pdfs';
 
-  // ── Get the permanent downloads directory ───────────────────────
   static Future<Directory> _downloadsDir() async {
     final base = await getApplicationDocumentsDirectory();
     final dir = Directory('${base.path}/downloaded_pdfs');
@@ -43,7 +41,6 @@ class DownloadedPdfService {
     return dir;
   }
 
-  // ── Load all saved PDFs ─────────────────────────────────────────
   static Future<List<DownloadedPdf>> getAll() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getStringList(_key) ?? [];
@@ -52,7 +49,6 @@ class DownloadedPdfService {
     for (final item in raw) {
       try {
         final pdf = DownloadedPdf.fromJson(jsonDecode(item));
-        // Only include if file still exists on disk
         if (await File(pdf.localPath).exists()) {
           result.add(pdf);
         }
@@ -64,15 +60,12 @@ class DownloadedPdfService {
     return result;
   }
 
-  // ── Check if a URL is already downloaded ───────────────────────
   static Future<bool> isDownloaded(String url) async {
     final all = await getAll();
     final id = _idFromUrl(url);
     return all.any((p) => p.id == id);
   }
 
-  // ── Save a downloaded temp file permanently ─────────────────────
-  /// Call this after Dio downloads to temp. Copies to permanent dir.
   static Future<DownloadedPdf> save({
     required String url,
     required String title,
@@ -82,7 +75,6 @@ class DownloadedPdfService {
     final id = _idFromUrl(url);
     final permanentPath = '${dir.path}/$id.pdf';
 
-    // Copy from temp to permanent location
     await File(tempPath).copy(permanentPath);
 
     final pdf = DownloadedPdf(
@@ -92,11 +84,9 @@ class DownloadedPdfService {
       savedAt: DateTime.now(),
     );
 
-    // Persist metadata
     final prefs = await SharedPreferences.getInstance();
     final existing = prefs.getStringList(_key) ?? [];
 
-    // Remove old entry for same id if exists
     existing.removeWhere((item) {
       try {
         return DownloadedPdf.fromJson(jsonDecode(item)).id == id;
@@ -111,7 +101,6 @@ class DownloadedPdfService {
     return pdf;
   }
 
-  // ── Delete a saved PDF ──────────────────────────────────────────
   static Future<void> delete(String id) async {
     final prefs = await SharedPreferences.getInstance();
     final existing = prefs.getStringList(_key) ?? [];
@@ -129,11 +118,9 @@ class DownloadedPdfService {
     } catch (_) {}
 
     if (toDelete != null) {
-      // Delete file from disk
       final file = File(toDelete.localPath);
       if (await file.exists()) await file.delete();
 
-      // Remove from prefs
       existing.removeWhere((item) {
         try {
           return DownloadedPdf.fromJson(jsonDecode(item)).id == id;
@@ -145,9 +132,7 @@ class DownloadedPdfService {
     }
   }
 
-  // ── Stable ID from URL ──────────────────────────────────────────
   static String _idFromUrl(String url) {
-    // Use last path segment without extension as base, sanitized
     final uri = Uri.tryParse(url);
     final segment = uri?.pathSegments.lastOrNull ?? url;
     final name = segment

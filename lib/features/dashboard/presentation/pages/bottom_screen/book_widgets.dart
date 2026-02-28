@@ -3,7 +3,6 @@ import 'package:adaptive_quiz/core/offline/download_pdf_service.dart';
 import 'package:adaptive_quiz/features/dashboard/presentation/pages/bottom_screen/pdf_viewer_screen.dart';
 import '../../../domain/entities/resource_entity.dart';
 
-// ── Books Tab ─────────────────────────────────────────────────────
 class BooksTab extends StatelessWidget {
   final List<dynamic> books;
   final dynamic resourceState;
@@ -38,9 +37,9 @@ class BooksTab extends StatelessWidget {
               prefixIcon: const Icon(Icons.search),
               suffixIcon: searchQuery.isNotEmpty
                   ? IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () => onSearchChanged(''),
-              )
+                      icon: const Icon(Icons.clear),
+                      onPressed: () => onSearchChanged(''),
+                    )
                   : null,
               filled: true,
               fillColor: Colors.white,
@@ -57,47 +56,44 @@ class BooksTab extends StatelessWidget {
               ? const Center(child: CircularProgressIndicator())
               : resourceState.error != null
               ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Failed to load books",
-                    style:
-                    TextStyle(color: Colors.grey[600])),
-                const SizedBox(height: 12),
-                TextButton(
-                  onPressed: onRefresh,
-                  child: const Text("Retry"),
-                ),
-              ],
-            ),
-          )
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Failed to load books",
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                      const SizedBox(height: 12),
+                      TextButton(
+                        onPressed: onRefresh,
+                        child: const Text("Retry"),
+                      ),
+                    ],
+                  ),
+                )
               : books.isEmpty
               ? Center(
-            child: Text(
-              searchQuery.isEmpty
-                  ? "No books available yet."
-                  : "No results found.",
-              style: TextStyle(color: Colors.grey[500]),
-            ),
-          )
+                  child: Text(
+                    searchQuery.isEmpty
+                        ? "No books available yet."
+                        : "No results found.",
+                    style: TextStyle(color: Colors.grey[500]),
+                  ),
+                )
               : ListView.builder(
-            padding: const EdgeInsets.all(12),
-            itemCount: books.length,
-            itemBuilder: (context, index) {
-              final book = books[index];
-              return BookCard(
-                book: book,
-                onLaunchUrl: onLaunchUrl,
-              );
-            },
-          ),
+                  padding: const EdgeInsets.all(12),
+                  itemCount: books.length,
+                  itemBuilder: (context, index) {
+                    final book = books[index];
+                    return BookCard(book: book, onLaunchUrl: onLaunchUrl);
+                  },
+                ),
         ),
       ],
     );
   }
 }
 
-// ── Single Book Card ─────────────────────────────────────────────
 class BookCard extends StatelessWidget {
   final dynamic book;
   final void Function(BuildContext, String) onLaunchUrl;
@@ -112,21 +108,17 @@ class BookCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => PdfViewerScreen(
-                url: book.fileUrl!,
-                title: book.title,
-              ),
+              builder: (_) =>
+                  PdfViewerScreen(url: book.fileUrl!, title: book.title),
             ),
           );
-        } else if (book.format == ResourceFormat.link &&
-            book.linkUrl != null) {
+        } else if (book.format == ResourceFormat.link && book.linkUrl != null) {
           onLaunchUrl(context, book.linkUrl!);
         }
       },
       child: Card(
         elevation: 3,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         margin: const EdgeInsets.only(bottom: 16),
         child: Container(
           decoration: BoxDecoration(
@@ -158,9 +150,7 @@ class BookCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        book.format == ResourceFormat.pdf
-                            ? "PDF"
-                            : "Link",
+                        book.format == ResourceFormat.pdf ? "PDF" : "Link",
                         style: const TextStyle(
                           fontSize: 11,
                           color: Colors.white60,
@@ -200,13 +190,18 @@ class BookCard extends StatelessWidget {
                       const SizedBox(height: 10),
                       Row(
                         children: const [
-                          Icon(Icons.download_rounded,
-                              size: 13, color: Colors.white38),
+                          Icon(
+                            Icons.download_rounded,
+                            size: 13,
+                            color: Colors.white38,
+                          ),
                           SizedBox(width: 4),
                           Text(
                             "Tap to open",
                             style: TextStyle(
-                                fontSize: 11, color: Colors.white38),
+                              fontSize: 11,
+                              color: Colors.white38,
+                            ),
                           ),
                         ],
                       ),
@@ -222,7 +217,6 @@ class BookCard extends StatelessWidget {
   }
 }
 
-// ── Downloads Tab ───────────────────────────────────────────────
 class DownloadsTab extends StatelessWidget {
   final List<DownloadedPdf> downloads;
   final bool isLoading;
@@ -246,8 +240,11 @@ class DownloadsTab extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.download_for_offline_outlined,
-                  size: 64, color: Colors.grey[300]),
+              Icon(
+                Icons.download_for_offline_outlined,
+                size: 64,
+                color: Colors.grey[300],
+              ),
               const SizedBox(height: 20),
               Text(
                 "No downloads yet",
@@ -261,8 +258,7 @@ class DownloadsTab extends StatelessWidget {
               Text(
                 "Open any PDF book and tap ↓ in the top-right corner to save it for offline reading.",
                 textAlign: TextAlign.center,
-                style:
-                TextStyle(fontSize: 13, color: Colors.black),
+                style: TextStyle(fontSize: 13, color: Colors.black),
               ),
             ],
           ),
@@ -320,7 +316,11 @@ class DownloadedPdfCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: const [
-            BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3)),
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 6,
+              offset: Offset(0, 3),
+            ),
           ],
         ),
         child: Row(
@@ -332,8 +332,11 @@ class DownloadedPdfCard extends StatelessWidget {
                 color: Colors.red.shade50,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(Icons.picture_as_pdf_rounded,
-                  color: Colors.red.shade400, size: 26),
+              child: Icon(
+                Icons.picture_as_pdf_rounded,
+                color: Colors.red.shade400,
+                size: 26,
+              ),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -353,8 +356,11 @@ class DownloadedPdfCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      const Icon(Icons.wifi_off_rounded,
-                          size: 12, color: Color(0xFF16A34A)),
+                      const Icon(
+                        Icons.wifi_off_rounded,
+                        size: 12,
+                        color: Color(0xFF16A34A),
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         "Available offline · ${_formatDate(pdf.savedAt)}",
@@ -374,9 +380,12 @@ class DownloadedPdfCard extends StatelessWidget {
                   context: context,
                   builder: (_) => AlertDialog(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     title: const Text("Remove download?"),
-                    content: Text("\"${pdf.title}\" will be removed from your device."),
+                    content: Text(
+                      "\"${pdf.title}\" will be removed from your device.",
+                    ),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(context),
@@ -398,8 +407,11 @@ class DownloadedPdfCard extends StatelessWidget {
               },
               child: Padding(
                 padding: const EdgeInsets.all(6),
-                child: Icon(Icons.delete_outline_rounded,
-                    color: Colors.grey[400], size: 22),
+                child: Icon(
+                  Icons.delete_outline_rounded,
+                  color: Colors.grey[400],
+                  size: 22,
+                ),
               ),
             ),
           ],

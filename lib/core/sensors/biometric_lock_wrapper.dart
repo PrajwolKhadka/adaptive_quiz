@@ -39,7 +39,6 @@ class _BiometricLockWrapperState extends State<BiometricLockWrapper>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.paused) {
-      // Always arm when going to background
       final enabled = await AppLockService.isEnabled();
       if (enabled) setState(() => _locked = true);
     } else if (state == AppLifecycleState.resumed && _locked) {
@@ -88,7 +87,6 @@ class _BiometricLockWrapperState extends State<BiometricLockWrapper>
   }
 }
 
-// ── Lock overlay ──────────────────────────────────────────────────
 class _LockScreen extends StatelessWidget {
   final bool isAuthenticating;
   final VoidCallback onUnlock;

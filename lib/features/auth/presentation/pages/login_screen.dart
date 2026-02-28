@@ -33,7 +33,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     ref.read(authViewModelProvider.notifier).login(
       emailController.text.trim(),
       passwordController.text.trim(),
-          (isFirstLogin, token) async {
+      (isFirstLogin, token) async {
         setState(() => isLoading = false);
         if (isFirstLogin) {
           Navigator.pushReplacement(
@@ -46,9 +46,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             context,
             // MaterialPageRoute(builder: (_) => const MainScreen()),
             MaterialPageRoute(
-              builder: (_) => const BiometricLockWrapper(
-                child: MainScreen(),
-              ),
+              builder: (_) => const BiometricLockWrapper(child: MainScreen()),
             ),
           );
         }
@@ -77,10 +75,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFFFFFFF),
-              Color(0xFFBEE1FA),
-            ],
+            colors: [Color(0xFFFFFFFF), Color(0xFFBEE1FA)],
           ),
         ),
         child: SafeArea(
@@ -127,33 +122,36 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                   const SizedBox(height: 40),
 
-                  // Email field
                   _fieldLabel("Email address"),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                     style: const TextStyle(
-                        fontSize: 15, color: Color(0xFF111827)),
+                      fontSize: 15,
+                      color: Color(0xFF111827),
+                    ),
                     decoration: _inputDecoration("you@school.edu"),
                     validator: (v) =>
-                    v == null || v.isEmpty ? "Email is required" : null,
+                        v == null || v.isEmpty ? "Email is required" : null,
                   ),
 
                   const SizedBox(height: 20),
 
-                  // Password field
                   _fieldLabel("Password"),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: passwordController,
                     obscureText: _obscurePassword,
                     style: const TextStyle(
-                        fontSize: 15, color: Color(0xFF111827)),
+                      fontSize: 15,
+                      color: Color(0xFF111827),
+                    ),
                     decoration: _inputDecoration("••••••••").copyWith(
                       suffixIcon: GestureDetector(
                         onTap: () => setState(
-                                () => _obscurePassword = !_obscurePassword),
+                          () => _obscurePassword = !_obscurePassword,
+                        ),
                         child: Icon(
                           _obscurePassword
                               ? Icons.visibility_off_outlined
@@ -164,19 +162,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                     validator: (v) =>
-                    v == null || v.isEmpty ? "Password is required" : null,
+                        v == null || v.isEmpty ? "Password is required" : null,
                   ),
 
                   const SizedBox(height: 12),
 
-                  // Forgot password link
                   Align(
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => const ForgotPasswordScreen()),
+                          builder: (_) => const ForgotPasswordScreen(),
+                        ),
                       ),
                       child: const Text(
                         "Forgot password?",
@@ -207,22 +205,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: Center(
                         child: isLoading
                             ? const SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                            color: Colors.white,
-                          ),
-                        )
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: Colors.white,
+                                ),
+                              )
                             : const Text(
-                          "Sign In",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.2,
-                          ),
-                        ),
+                                "Sign In",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.2,
+                                ),
+                              ),
                       ),
                     ),
                   ),
@@ -252,29 +250,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return InputDecoration(
       hintText: hint,
       hintStyle: const TextStyle(color: Color(0xFFD1D5DB), fontSize: 15),
-      contentPadding:
-      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       filled: true,
       fillColor: const Color(0xFFF9FAFB),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide:
-        const BorderSide(color: Color(0xFFE5E7EB), width: 1.5),
+        borderSide: const BorderSide(color: Color(0xFFE5E7EB), width: 1.5),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide:
-        const BorderSide(color: Color(0xFF1D61E7), width: 1.5),
+        borderSide: const BorderSide(color: Color(0xFF1D61E7), width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide:
-        const BorderSide(color: Color(0xFFEF4444), width: 1.5),
+        borderSide: const BorderSide(color: Color(0xFFEF4444), width: 1.5),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide:
-        const BorderSide(color: Color(0xFFEF4444), width: 1.5),
+        borderSide: const BorderSide(color: Color(0xFFEF4444), width: 1.5),
       ),
     );
   }

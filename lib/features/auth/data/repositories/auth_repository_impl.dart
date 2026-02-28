@@ -13,16 +13,18 @@ class AuthRepositoryImpl implements IAuthRepository {
   AuthRepositoryImpl(this._authRemoteDatasource, this._authLocalDatasource);
 
   @override
-  Future<Either<Failure, AuthResponse>> loginStudent(String email, String password) async {
+  Future<Either<Failure, AuthResponse>> loginStudent(
+    String email,
+    String password,
+  ) async {
     try {
       final authApiModel = await _authRemoteDatasource.login(email, password);
 
-      // Save locally if not first login (optional)
       if (!authApiModel.isFirstLogin) {
         await _authLocalDatasource.saveStudent(authApiModel.toHiveModel());
       }
 
-      return Right(authApiModel.toEntity()); // Return the AuthResponse
+      return Right(authApiModel.toEntity());
     } catch (e) {
       return Left(
         ApiFailure(
@@ -35,7 +37,7 @@ class AuthRepositoryImpl implements IAuthRepository {
   }
 
   @override
-  Future<Either<Failure, void>> changePassword(String newPassword) async{
+  Future<Either<Failure, void>> changePassword(String newPassword) async {
     try {
       await _authRemoteDatasource.changePassword(newPassword);
       return const Right(null);

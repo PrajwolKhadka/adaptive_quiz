@@ -2,17 +2,11 @@ import 'package:adaptive_quiz/core/providers/common_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/api/api_client.dart';
 import '../../../../core/api/api_endpoint.dart';
 import '../../../../common/my_snackbar.dart';
 import 'login_screen.dart';
 import 'package:dio/dio.dart';
 
-// ─────────────────────────────────────────────────────────────────
-// Forgot Password Screen  (2 steps in one screen)
-// Step 1: enter email → POST /auth/student-forgot-password
-// Step 2: enter OTP + new password → PUT /auth/student-reset-password
-// ─────────────────────────────────────────────────────────────────
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
 
@@ -21,8 +15,7 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
       _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState
-    extends ConsumerState<ForgotPasswordScreen> {
+class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   // Step 1
   final _emailKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
@@ -36,7 +29,7 @@ class _ForgotPasswordScreenState
   bool _obscureNew = true;
   bool _obscureConfirm = true;
   bool _isLoading = false;
-  bool _otpSent = false; // false = step 1, true = step 2
+  bool _otpSent = false;
 
   @override
   void dispose() {
@@ -47,7 +40,6 @@ class _ForgotPasswordScreenState
     super.dispose();
   }
 
-  // ── Step 1: send OTP ───────────────────────────────────────────
   Future<void> _sendOtp() async {
     if (!_emailKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
@@ -60,23 +52,20 @@ class _ForgotPasswordScreenState
       );
       setState(() => _otpSent = true);
       if (mounted) {
-        showMySnackBar(
-          context: context,
-          message: "OTP sent to your email",
-        );
+        showMySnackBar(context: context, message: "OTP sent to your email");
       }
     } on DioException catch (e) {
-      final msg =
-          e.response?.data?['message'] ?? "Failed to send OTP";
+      final msg = e.response?.data?['message'] ?? "Failed to send OTP";
       if (mounted) {
         showMySnackBar(context: context, message: msg, color: Colors.red);
       }
     } catch (e) {
       if (mounted) {
         showMySnackBar(
-            context: context,
-            message: "Something went wrong",
-            color: Colors.red);
+          context: context,
+          message: "Something went wrong",
+          color: Colors.red,
+        );
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -105,21 +94,21 @@ class _ForgotPasswordScreenState
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (_) => const LoginScreen()),
-              (_) => false,
+          (_) => false,
         );
       }
     } on DioException catch (e) {
-      final msg =
-          e.response?.data?['message'] ?? "Invalid or expired OTP";
+      final msg = e.response?.data?['message'] ?? "Invalid or expired OTP";
       if (mounted) {
         showMySnackBar(context: context, message: msg, color: Colors.red);
       }
     } catch (e) {
       if (mounted) {
         showMySnackBar(
-            context: context,
-            message: "Something went wrong",
-            color: Colors.red);
+          context: context,
+          message: "Something went wrong",
+          color: Colors.red,
+        );
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -137,10 +126,7 @@ class _ForgotPasswordScreenState
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFFFFFFF),
-              Color(0xFFBEE1FA),
-            ],
+            colors: [Color(0xFFFFFFFF), Color(0xFFBEE1FA)],
           ),
         ),
         child: SafeArea(
@@ -154,8 +140,10 @@ class _ForgotPasswordScreenState
 
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.arrow_back,
-                        color: Color(0xFF111827)),
+                    child: const Icon(
+                      Icons.arrow_back,
+                      color: Color(0xFF111827),
+                    ),
                   ),
 
                   const SizedBox(height: 40),
@@ -279,7 +267,8 @@ class _ForgotPasswordScreenState
                             obscureText: _obscureConfirm,
                             suffixIcon: GestureDetector(
                               onTap: () => setState(
-                                      () => _obscureConfirm = !_obscureConfirm),
+                                () => _obscureConfirm = !_obscureConfirm,
+                              ),
                               child: Icon(
                                 _obscureConfirm
                                     ? Icons.visibility_off_outlined
@@ -362,9 +351,7 @@ class _StepIndicator extends StatelessWidget {
           height: 10,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: active
-                ? const Color(0xFF1D61E7)
-                : const Color(0xFFE5E7EB),
+            color: active ? const Color(0xFF1D61E7) : const Color(0xFFE5E7EB),
           ),
         ),
         const SizedBox(height: 4),
@@ -373,9 +360,7 @@ class _StepIndicator extends StatelessWidget {
           style: TextStyle(
             fontSize: 10,
             fontWeight: FontWeight.w600,
-            color: active
-                ? const Color(0xFF1D61E7)
-                : const Color(0xFF9CA3AF),
+            color: active ? const Color(0xFF1D61E7) : const Color(0xFF9CA3AF),
           ),
         ),
       ],
@@ -388,9 +373,7 @@ class _StepIndicator extends StatelessWidget {
         height: 2,
         margin: const EdgeInsets.only(bottom: 14, left: 6, right: 6),
         decoration: BoxDecoration(
-          color: active
-              ? const Color(0xFF1D61E7)
-              : const Color(0xFFE5E7EB),
+          color: active ? const Color(0xFF1D61E7) : const Color(0xFFE5E7EB),
           borderRadius: BorderRadius.circular(2),
         ),
       ),
@@ -439,41 +422,45 @@ class _Field extends StatelessWidget {
           keyboardType: keyboardType,
           maxLength: maxLength,
           validator: validator,
-          style: const TextStyle(
-            fontSize: 15,
-            color: Color(0xFF111827),
-          ),
+          style: const TextStyle(fontSize: 15, color: Color(0xFF111827)),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(
-              color: Color(0xFFD1D5DB),
-              fontSize: 15,
-            ),
+            hintStyle: const TextStyle(color: Color(0xFFD1D5DB), fontSize: 15),
             counterText: "",
             suffixIcon: suffixIcon,
             contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16, vertical: 14),
+              horizontal: 16,
+              vertical: 14,
+            ),
             filled: true,
             fillColor: const Color(0xFFF9FAFB),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide:
-              const BorderSide(color: Color(0xFFE5E7EB), width: 1.5),
+              borderSide: const BorderSide(
+                color: Color(0xFFE5E7EB),
+                width: 1.5,
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide:
-              const BorderSide(color: Color(0xFF1D61E7), width: 1.5),
+              borderSide: const BorderSide(
+                color: Color(0xFF1D61E7),
+                width: 1.5,
+              ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide:
-              const BorderSide(color: Color(0xFFEF4444), width: 1.5),
+              borderSide: const BorderSide(
+                color: Color(0xFFEF4444),
+                width: 1.5,
+              ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide:
-              const BorderSide(color: Color(0xFFEF4444), width: 1.5),
+              borderSide: const BorderSide(
+                color: Color(0xFFEF4444),
+                width: 1.5,
+              ),
             ),
           ),
         ),
@@ -502,29 +489,28 @@ class _PrimaryButton extends StatelessWidget {
         width: double.infinity,
         height: 54,
         decoration: BoxDecoration(
-          color:
-          isLoading ? const Color(0xFF6B7280) : const Color(0xFF111827),
+          color: isLoading ? const Color(0xFF6B7280) : const Color(0xFF111827),
           borderRadius: BorderRadius.circular(14),
         ),
         child: Center(
           child: isLoading
               ? const SizedBox(
-            width: 22,
-            height: 22,
-            child: CircularProgressIndicator(
-              strokeWidth: 2.5,
-              color: Colors.white,
-            ),
-          )
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    color: Colors.white,
+                  ),
+                )
               : Text(
-            label,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.2,
-            ),
-          ),
+                  label,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.2,
+                  ),
+                ),
         ),
       ),
     );

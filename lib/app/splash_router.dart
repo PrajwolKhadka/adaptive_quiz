@@ -1,6 +1,8 @@
+import 'package:adaptive_quiz/features/onboarding/presentation/pages/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/providers/common_provider.dart';
 import '../features/splash/presentation/pages/splash_screen.dart';
 import '../core/services/storage/user_session_service.dart';
 import '../core/sensors/biometric_lock_wrapper.dart';
@@ -24,15 +26,31 @@ class _SplashRouterState extends ConsumerState<SplashRouter> {
     _handleRouting();
   }
 
+  // Future<void> _handleRouting() async {
+  //   await Future.delayed(const Duration(seconds: 2));
+  //   // wait for splash animation
+  //
+  //   final session = UserSessionService();
+  //   final token = session.getToken();
+  //
+  //   if (token == null) {
+  //     _nextScreen = const LoginScreen();
+  //   } else {
+  //     _nextScreen = const BiometricLockWrapper(child: MainScreen());
+  //   }
+  //
+  //   setState(() {
+  //     _loaded = true;
+  //   });
+  // }
   Future<void> _handleRouting() async {
     await Future.delayed(const Duration(seconds: 2));
-    // wait for splash animation
 
-    final session = UserSessionService();
-    final token = session.getToken();
+    final session = ref.read(userSessionServiceProvider);
+    final token = await session.getToken();
 
-    if (token == null) {
-      _nextScreen = const LoginScreen();
+    if (token == null || token.isEmpty) {
+      _nextScreen = const OnboardingScreen();
     } else {
       _nextScreen = const BiometricLockWrapper(child: MainScreen());
     }
@@ -41,7 +59,6 @@ class _SplashRouterState extends ConsumerState<SplashRouter> {
       _loaded = true;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     if (!_loaded) {
