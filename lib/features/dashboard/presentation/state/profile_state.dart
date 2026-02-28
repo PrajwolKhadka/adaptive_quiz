@@ -3,7 +3,7 @@ class ProfileState {
   final String? error;
   final String? fullName;
   final String? email;
-  final int? className;       // int to match backend
+  final int? className;
   final String? imageUrl;
   final String? localImagePath;
 

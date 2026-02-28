@@ -7,7 +7,6 @@ import '../../domain/usecases/result_usecases.dart';
 import '../state/result_state.dart';
 import '../view_model/result_view_model.dart';
 
-// 1. Remote Datasource
 final resultRemoteDatasourceProvider =
 Provider<IResultRemoteDatasource>((ref) {
   return ResultRemoteDatasource(
@@ -16,12 +15,10 @@ Provider<IResultRemoteDatasource>((ref) {
   );
 });
 
-// 2. Repository
 final resultRepositoryProvider = Provider<IResultRepository>((ref) {
   return ResultRepositoryImpl(ref.read(resultRemoteDatasourceProvider));
 });
 
-// 3. Use Cases
 final getMyHistoryUsecaseProvider = Provider<GetMyHistoryUsecase>((ref) {
   return GetMyHistoryUsecase(ref.read(resultRepositoryProvider));
 });
@@ -36,7 +33,6 @@ Provider<GetMyResultDetailUsecase>((ref) {
   return GetMyResultDetailUsecase(ref.read(resultRepositoryProvider));
 });
 
-// 4. ViewModel
 final resultViewModelProvider =
 NotifierProvider<ResultViewModel, ResultState>(
       () => ResultViewModel(),

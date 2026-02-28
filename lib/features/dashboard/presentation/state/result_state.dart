@@ -52,19 +52,15 @@
 import '../../domain/entities/result_entity.dart';
 
 class ResultState {
-  // ✅ Main loading
   final bool isLoading;
   final String? error;
 
-  // ✅ History + Pagination
   final List<QuizHistoryEntity> history;
   final bool isLoadingMore;
   final bool hasMore;
 
-  // ✅ Graph
   final Map<String, List<SubjectGraphPoint>> graph;
 
-  // ✅ Detail state
   final bool isLoadingDetail;
   final String? detailError;
   final QuizResultDetailEntity? detail;
@@ -81,7 +77,6 @@ class ResultState {
     this.detail,
   });
 
-  // ✅ Initial State
   factory ResultState.initial() => ResultState(
     isLoading: false,
     history: [],
@@ -91,7 +86,6 @@ class ResultState {
     isLoadingDetail: false,
   );
 
-  // ✅ Copy With
   ResultState copyWith({
     bool? isLoading,
     String? error,
