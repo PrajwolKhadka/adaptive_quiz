@@ -1,3 +1,6 @@
+@Tags(['widget'])
+library;
+
 import 'dart:async' show Completer;
 
 import 'package:dartz/dartz.dart';

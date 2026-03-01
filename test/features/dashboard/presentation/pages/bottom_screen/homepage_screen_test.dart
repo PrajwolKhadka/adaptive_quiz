@@ -1,3 +1,6 @@
+@Tags(['widget'])
+library;
+
 import 'package:adaptive_quiz/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';

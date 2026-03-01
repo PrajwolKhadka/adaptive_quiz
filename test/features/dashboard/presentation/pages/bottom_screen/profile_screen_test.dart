@@ -1,3 +1,6 @@
+@Tags(['widget'])
+library;
+
 import 'dart:async';
 
 import 'package:adaptive_quiz/core/error/failure.dart';
