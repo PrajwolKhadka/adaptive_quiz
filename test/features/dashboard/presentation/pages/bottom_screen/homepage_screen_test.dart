@@ -43,10 +43,7 @@ void main() {
 
     when(() => mockGetActive()).thenAnswer(
       (_) async => Right<Failure, ActiveQuizEntity>(
-        ActiveQuizEntity(
-          available: quizAvailable,
-          // 🔴 If your entity has more required fields, add them here
-        ),
+        ActiveQuizEntity(available: quizAvailable),
       ),
     );
 
