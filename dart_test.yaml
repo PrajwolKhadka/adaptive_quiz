@@ -1,0 +1,5 @@
+tags:
+  unit:
+    description: "Unit tests for domain/business logic"
+  widget:
+    description: "Widget tests for UI layer"
