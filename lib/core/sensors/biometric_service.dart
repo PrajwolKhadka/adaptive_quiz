@@ -21,7 +21,7 @@ class BiometricService {
   /// Returns true if authenticated successfully
   // static Future<bool> authenticate() async {
   //   try {
-  //     print("🔐 AUTHENTICATE CALLED");
+  //     print("AUTHENTICATE CALLED");
   //     return await _auth.authenticate(
   //       localizedReason: 'Confirm your identity to continue',
   //       options: const AuthenticationOptions(

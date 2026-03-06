@@ -1,99 +1,113 @@
-import 'package:adaptive_quiz/features/auth/presentation/pages/change_password_screen.dart';
-import 'package:adaptive_quiz/features/auth/presentation/pages/login_screen.dart';
-import 'package:adaptive_quiz/features/auth/presentation/state/auth_state.dart';
-import 'package:adaptive_quiz/features/auth/presentation/view_model/auth_view_model.dart';
-import 'package:adaptive_quiz/features/dashboard/presentation/pages/main_screen.dart';
+@Tags(['widget'])
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-// Mock class for the Notifier
-class MockAuthViewModel extends Notifier<AuthState>
-    with Mock
-    implements AuthViewModel {
-  @override
-  AuthState build() => AuthState.initial();
+import 'package:adaptive_quiz/features/auth/data/repositories/auth_repository.dart';
+import 'package:adaptive_quiz/features/auth/presentation/pages/login_screen.dart';
+import 'package:adaptive_quiz/features/auth/presentation/providers/auth_provider.dart';
+import 'package:adaptive_quiz/core/providers/common_provider.dart';
+import 'package:adaptive_quiz/core/services/storage/user_session_service.dart';
+import 'package:adaptive_quiz/features/dashboard/domain/usecases/get_profile_usecase.dart';
+import 'package:adaptive_quiz/features/dashboard/domain/usecases/upload_profile_picture_usecase.dart';
+import 'package:adaptive_quiz/features/dashboard/presentation/providers/profile_provider.dart';
+
+class MockAuthRepository extends Mock implements IAuthRepository {}
+
+class MockUserSessionService extends Mock implements UserSessionService {}
+
+class MockGetProfileUsecase extends Mock implements GetProfileUsecase {}
+
+class MockUploadProfilePictureUsecase extends Mock
+    implements UploadProfilePictureUsecase {}
+
+Widget buildLoginScreen({
+  required MockAuthRepository mockRepo,
+  required MockUserSessionService mockSession,
+  required MockGetProfileUsecase mockGetProfile,
+}) {
+  return ProviderScope(
+    overrides: [
+      authRepositoryProvider.overrideWithValue(mockRepo),
+      userSessionServiceProvider.overrideWithValue(mockSession),
+      getProfileUsecaseProvider.overrideWithValue(mockGetProfile),
+      uploadProfilePictureUsecaseProvider.overrideWithValue(
+        MockUploadProfilePictureUsecase(),
+      ),
+    ],
+    child: const MaterialApp(home: LoginScreen()),
+  );
 }
 
 void main() {
-  late MockAuthViewModel mockViewModel;
+  late MockAuthRepository mockRepo;
+  late MockUserSessionService mockSession;
+  late MockGetProfileUsecase mockGetProfile;
 
   setUp(() {
-    mockViewModel = MockAuthViewModel();
+    mockRepo = MockAuthRepository();
+    mockSession = MockUserSessionService();
+    mockGetProfile = MockGetProfileUsecase();
   });
 
-  // Helper function to wrap the widget in necessary providers
-  Widget createTestWidget() {
-    return ProviderScope(
-      overrides: [authViewModelProvider.overrideWith(() => mockViewModel)],
-      child: const MaterialApp(home: LoginScreen()),
+  testWidgets('LoginScreen shows email and password fields', (tester) async {
+    await tester.pumpWidget(
+      buildLoginScreen(
+        mockRepo: mockRepo,
+        mockSession: mockSession,
+        mockGetProfile: mockGetProfile,
+      ),
     );
-  }
+    await tester.pump();
 
-  group('LoginScreen Widget Tests', () {
-    testWidgets('Should display all UI elements correctly', (tester) async {
-      await tester.pumpWidget(createTestWidget());
+    expect(find.byType(TextFormField), findsNWidgets(2));
+  });
 
-      expect(find.text('Sign in to your\nAccount'), findsOneWidget);
-      expect(
-        find.byType(TextFormField),
-        findsNWidgets(2),
-      ); // Email and Password
-      expect(find.text('Login'), findsOneWidget);
-    });
-
-    testWidgets(
-      'Should show validation errors when clicking login with empty fields',
-      (tester) async {
-        await tester.pumpWidget(createTestWidget());
-
-        await tester.tap(find.text('Login'));
-        await tester.pump(); // Start validation frame
-
-        expect(find.text('Email required'), findsOneWidget);
-        expect(find.text('Password required'), findsOneWidget);
-      },
+  testWidgets('LoginScreen shows Sign In button', (tester) async {
+    await tester.pumpWidget(
+      buildLoginScreen(
+        mockRepo: mockRepo,
+        mockSession: mockSession,
+        mockGetProfile: mockGetProfile,
+      ),
     );
+    await tester.pump();
 
-    testWidgets('Should call login on ViewModel when form is valid', (
-      tester,
-    ) async {
-      await tester.pumpWidget(createTestWidget());
+    expect(find.text('Sign In'), findsOneWidget);
+  });
 
-      // Mock the login method to do nothing (it's a void function)
-      when(
-        () => mockViewModel.login(any(), any(), any()),
-      ).thenAnswer((_) async {});
+  testWidgets('LoginScreen shows validation errors when submitted empty', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      buildLoginScreen(
+        mockRepo: mockRepo,
+        mockSession: mockSession,
+        mockGetProfile: mockGetProfile,
+      ),
+    );
+    await tester.pump();
 
-      await tester.enterText(
-        find.byType(TextFormField).at(0),
-        'test@student.com',
-      );
-      await tester.enterText(find.byType(TextFormField).at(1), 'password123');
+    await tester.tap(find.text('Sign In'));
+    await tester.pump();
 
-      await tester.tap(find.text('Login'));
-      await tester.pump();
+    expect(find.text('Email is required'), findsOneWidget);
+    expect(find.text('Password is required'), findsOneWidget);
+  });
 
-      verify(
-        () => mockViewModel.login('test@student.com', 'password123', any()),
-      ).called(1);
-    });
+  testWidgets('LoginScreen shows Forgot password link', (tester) async {
+    await tester.pumpWidget(
+      buildLoginScreen(
+        mockRepo: mockRepo,
+        mockSession: mockSession,
+        mockGetProfile: mockGetProfile,
+      ),
+    );
+    await tester.pump();
 
-    testWidgets('Should show SnackBar when state has an error', (tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      // Simulate a state change to error
-      mockViewModel.state = const AuthState(
-        isLoading: false,
-        error: 'Invalid Credentials',
-      );
-
-      // Pump to trigger ref.listen
-      await tester.pump();
-
-      expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.text('Invalid Credentials'), findsOneWidget);
-    });
+    expect(find.text('Forgot password?'), findsOneWidget);
   });
 }

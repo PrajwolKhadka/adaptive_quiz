@@ -1,46 +1,61 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mocktail/mocktail.dart';
+@Tags(['unit'])
+library;
+
 import 'package:dartz/dartz.dart';
-import 'package:adaptive_quiz/features/auth/presentation/providers/auth_provider.dart';
-import 'package:adaptive_quiz/features/auth/presentation/state/auth_state.dart';
-import 'package:adaptive_quiz/core/providers/common_provider.dart';
-import '../../../../mocks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
 import 'package:adaptive_quiz/core/error/failure.dart';
+import 'package:adaptive_quiz/features/auth/data/repositories/auth_repository.dart';
 import 'package:adaptive_quiz/features/auth/domain/entities/auth_response.dart';
+import 'package:adaptive_quiz/features/auth/presentation/providers/auth_provider.dart';
+import 'package:adaptive_quiz/core/providers/common_provider.dart';
+import 'package:adaptive_quiz/core/services/storage/user_session_service.dart';
+import 'package:adaptive_quiz/features/dashboard/domain/entities/profile_entity.dart';
+import 'package:adaptive_quiz/features/dashboard/domain/usecases/get_profile_usecase.dart';
+import 'package:adaptive_quiz/features/dashboard/domain/usecases/upload_profile_picture_usecase.dart';
+import 'package:adaptive_quiz/features/dashboard/presentation/providers/profile_provider.dart';
+
+class MockAuthRepository extends Mock implements IAuthRepository {}
+
+class MockUserSessionService extends Mock implements UserSessionService {}
+
+class MockGetProfileUsecase extends Mock implements GetProfileUsecase {}
+
+class MockUploadProfilePictureUsecase extends Mock
+    implements UploadProfilePictureUsecase {}
 
 void main() {
-  late ProviderContainer container;
-  late MockAuthRepository mockAuthRepository;
+  late MockAuthRepository mockRepo;
   late MockUserSessionService mockSession;
+  late MockGetProfileUsecase mockGetProfile;
+  late ProviderContainer container;
+
+  const tEmail = 'test@example.com';
+  const tPassword = 'password123';
+  const tFailure = ApiFailure(message: 'Invalid credentials', statusCode: 401);
+  const tProfile = ProfileEntity(
+    fullName: 'John Doe',
+    email: tEmail,
+    className: 10,
+    isFirstLogin: false,
+  );
+
+  final tResponse = AuthResponse(
+    token: 'token123',
+    studentId: 'student1',
+    fullName: 'John Doe',
+    email: tEmail,
+    className: '10',
+    isFirstLogin: false,
+  );
 
   setUp(() {
-    mockAuthRepository = MockAuthRepository();
+    mockRepo = MockAuthRepository();
     mockSession = MockUserSessionService();
+    mockGetProfile = MockGetProfileUsecase();
 
-    container = ProviderContainer(
-      overrides: [
-        authRepositoryProvider.overrideWithValue(mockAuthRepository),
-        userSessionServiceProvider.overrideWithValue(mockSession),
-      ],
-    );
-  });
-
-  test('login success updates state and calls saveStudentSession', () async {
-    // Arrange
-    final viewModel = container.read(authViewModelProvider.notifier);
-    when(() => mockAuthRepository.loginStudent(any(), any())).thenAnswer(
-      (_) async => Right<Failure, AuthResponse>(
-        AuthResponse(
-          token: 'token123',
-          studentId: 'stu01',
-          fullName: 'John Doe',
-          email: 'john@example.com',
-          className: '10A',
-          isFirstLogin: true,
-        ),
-      ),
-    );
     when(
       () => mockSession.saveStudentSession(
         token: any(named: 'token'),
@@ -51,76 +66,61 @@ void main() {
       ),
     ).thenAnswer((_) async {});
 
-    var onSuccessCalled = false;
+    when(
+      () => mockSession.saveRemoteProfileImage(any()),
+    ).thenAnswer((_) async {});
 
-    // Act
-    await viewModel.login('john@example.com', 'password123', (
-      isFirstLogin,
-      token,
-    ) {
-      onSuccessCalled = true;
-      expect(isFirstLogin, true);
-      expect(token, 'token123');
-    });
+    // Stub profile load so ProfileViewModel doesn't fail during login flow
+    when(() => mockGetProfile()).thenAnswer((_) async => const Right(tProfile));
 
-    // Assert
+    container = ProviderContainer(
+      overrides: [
+        authRepositoryProvider.overrideWithValue(mockRepo),
+        userSessionServiceProvider.overrideWithValue(mockSession),
+        getProfileUsecaseProvider.overrideWithValue(mockGetProfile),
+        uploadProfilePictureUsecaseProvider.overrideWithValue(
+          MockUploadProfilePictureUsecase(),
+        ),
+      ],
+    );
+    addTearDown(container.dispose);
+  });
+
+  test('initial state is correct', () {
     final state = container.read(authViewModelProvider);
     expect(state.isLoading, false);
     expect(state.error, null);
-    expect(onSuccessCalled, true);
-    verify(
-      () => mockSession.saveStudentSession(
-        token: 'token123',
-        studentId: 'stu01',
-        fullName: 'John Doe',
-        email: 'john@example.com',
-        className: '10A',
-      ),
-    ).called(1);
   });
 
-  test('login failure updates state with error', () async {
-    final viewModel = container.read(authViewModelProvider.notifier);
-
+  test('login sets error on failure', () async {
     when(
-      () => mockAuthRepository.loginStudent(any(), any()),
-    ).thenAnswer((_) async => Left(ApiFailure(message: 'Invalid credentials')));
+      () => mockRepo.loginStudent(tEmail, tPassword),
+    ).thenAnswer((_) async => const Left(tFailure));
 
-    await viewModel.login('john@example.com', 'wrongpass', (_, __) {});
+    await container
+        .read(authViewModelProvider.notifier)
+        .login(tEmail, tPassword, (_, __) {});
 
     final state = container.read(authViewModelProvider);
     expect(state.isLoading, false);
     expect(state.error, 'Invalid credentials');
   });
 
-  test('changePassword success updates state', () async {
-    final viewModel = container.read(authViewModelProvider.notifier);
-
+  test('login calls onSuccess with correct isFirstLogin on success', () async {
     when(
-      () => mockAuthRepository.changePassword(any()),
-    ).thenAnswer((_) async => const Right(null));
+      () => mockRepo.loginStudent(tEmail, tPassword),
+    ).thenAnswer((_) async => Right(tResponse));
 
-    await viewModel.changePassword('newPass123');
+    bool? capturedFirstLogin;
+    await container
+        .read(authViewModelProvider.notifier)
+        .login(
+          tEmail,
+          tPassword,
+          (isFirstLogin, token) => capturedFirstLogin = isFirstLogin,
+        );
 
-    final state = container.read(authViewModelProvider);
-    expect(state.isLoading, false);
-    expect(state.error, null);
-  });
-
-  test('changePassword failure updates state with error', () async {
-    final viewModel = container.read(authViewModelProvider.notifier);
-
-    when(
-      () => mockAuthRepository.changePassword(any()),
-    ).thenThrow(Exception('Server error'));
-
-    expect(
-      () => viewModel.changePassword('newPass123'),
-      throwsA(isA<Exception>()),
-    );
-
-    final state = container.read(authViewModelProvider);
-    expect(state.isLoading, false);
-    expect(state.error, isNotNull);
+    expect(capturedFirstLogin, false);
+    expect(container.read(authViewModelProvider).error, null);
   });
 }

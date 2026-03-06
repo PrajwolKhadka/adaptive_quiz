@@ -52,49 +52,50 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Image.asset(
-          'assets/image/logo.png',
-          width: 120,
-        ),
+        title: Image.asset('assets/image/logo.png', width: 120),
         actions: [
-          IconButton(onPressed:(){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const ProfileScreen()),
-            );
-          },
-              icon: CircleAvatar(
-                radius: 40,
-                backgroundColor: Colors.white,
-                backgroundImage: profileImage,
-              ))
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ProfileScreen()),
+              );
+            },
+            icon: CircleAvatar(
+              radius: 40,
+              backgroundColor: Colors.white,
+              backgroundImage: profileImage,
+            ),
+          ),
         ],
       ),
       // body: pages[_selectedIndex],
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: const [
-            HomeScreen(),
-            BookScreen(),
-            ResultScreen(),
-          ],
-        ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: const [HomeScreen(), BookScreen(), ResultScreen()],
+      ),
       bottomNavigationBar: BottomNavigationBar(
-          items: const[
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.menu_book_rounded), label: "Books"),
-            BottomNavigationBarItem(icon: Icon(Icons.assignment_rounded), label: "Result"),
-          ],
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book_rounded),
+            label: "Books",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assignment_rounded),
+            label: "Result",
+          ),
+        ],
         backgroundColor: Colors.white,
         selectedItemColor: Color(0xFF88A4E0),
         unselectedItemColor: Colors.black,
         currentIndex: _selectedIndex,
-        onTap: (index){
-            setState(() {
-              _selectedIndex = index;
-            });
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
         },
-      )
+      ),
     );
   }
 }
