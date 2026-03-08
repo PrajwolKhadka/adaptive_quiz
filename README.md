@@ -43,7 +43,7 @@ The application is designed with a clean and simple interface to minimize distra
 ---
 
 
-## ▶️ Getting Started
+## Getting Started
 
 ### Prerequisites
 
